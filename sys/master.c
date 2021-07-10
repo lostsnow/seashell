@@ -1,6 +1,7 @@
 // K_MASTER_OB
 
 #include "master/uid.c"
+#include "master/error.c"
 
 void create()
 {
