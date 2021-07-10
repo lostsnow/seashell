@@ -1,3 +1,13 @@
+string get_root_uid()
+{
+    return ROOT_UID;
+}
+
+string get_bb_uid()
+{
+    return BACKBONE_UID;
+}
+
 string author_file(string str)
 {
     return (string) call_other(SIMUL_EFUN_OB, "author_file", str);

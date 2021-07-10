@@ -1,6 +1,11 @@
 // K_MASTER_OB
 
-#include "master/file.c"
+#include "master/uid.c"
+
+void create()
+{
+    efun::write("master: loaded successfully.\n");
+}
 
 void connect_init(int port)
 {
@@ -21,14 +26,4 @@ object connect(int port)
     }
 
     return login_ob;
-}
-
-string get_root_uid()
-{
-    return ROOT_UID;
-}
-
-string get_bb_uid()
-{
-    return BACKBONE_UID;
 }

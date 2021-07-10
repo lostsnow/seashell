@@ -1,3 +1,10 @@
 // K_SIMUL_EFUN_OB
 
-#include "simul_efun/object.c"
+#include "simul_efun/uid.c"
+#include "simul_efun/time.c"
+#include "simul_efun/file.c"
+
+void create()
+{
+    efun::write("simul_efun: loaded successfully.\n");
+}
