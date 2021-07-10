@@ -11,11 +11,15 @@ void preload(string file)
 {
     string err;
 
+    file += ".c";
+
     if (objectp(find_object(file))) {
         return;
     }
 
-    if (err = catch (call_other(file, "??"))) {
+    err = catch (call_other(file, "??"));
+
+    if (err) {
         write(sprintf("preloading %s failed: %s\n", file, err));
     }
 }

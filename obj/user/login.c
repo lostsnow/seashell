@@ -1,4 +1,6 @@
+#include <config.h>
+
 void logon()
 {
-    write("Welcome to seashell\n");
+    printf("Welcome to %s\n", "seashell");
 }
