@@ -1,9 +1,47 @@
+// efun: error
+
+void log_error(string message);
+
+int file_exists(string str) {
+    return (file_size(str) > -1);
+}
+
+mixed *separate_file(string file)
+{
+    string *list;
+    string str;
+    int i;
+
+    if (!file_exists(file))
+    {
+        log_error("file " + file + " not found\n");
+        return ({});
+    }
+
+    str = read_file(file);
+
+    if (!str) {
+        return ({});
+    }
+
+    str = replace_string(str, "\r", "");
+    list = explode(str, "\n");
+
+    for (i = 0; i < sizeof(list); i++) {
+        if (list[i] == "" || list[i][0] == '#') {
+            continue;
+        }
+    }
+
+    return list;
+}
+
 void assure_file(string file)
 {
     string path, *dir;
     int i;
 
-    if (file_size(file) != -1) {
+    if (!file_exists(file)) {
         return;
     }
 
@@ -32,12 +70,12 @@ void log_file(string file, string arg)
 
 void log_time(string file, string message)
 {
-    log_file(file, sprintf("[%s] %s", datetime(time()), message));
+    log_file(file, sprintf("[%s] %s", now(), message));
 }
 
 void log_error(string message)
 {
-    log_file("error.log", sprintf("[%s] %s", datetime(time()), message));
+    log_time("error.log", message);
 }
 
 void cat(string file)

@@ -2,6 +2,7 @@
 
 #include "master/uid.c"
 #include "master/error.c"
+#include "master/preload.c"
 
 void create()
 {
@@ -21,7 +22,7 @@ object connect(int port)
 
     if (err) {
         write("系统核心出现了故障，请待会再来。\n");
-        error(err);
+        log_time("error.log", err);
         destruct(this_object());
         return 0;
     }
