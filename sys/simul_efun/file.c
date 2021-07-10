@@ -44,3 +44,8 @@ void cat(string file)
 {
     write(read_file(file));
 }
+
+void color_cat(string file)
+{
+    write(color_filter(read_file(file)));
+}
