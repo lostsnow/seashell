@@ -4,9 +4,13 @@
 #define __KERNEL_DAEMON_H__
 
 #define K_CONFIG_D          KERNEL_DIR "sys/daemon/config"
+#define K_MSSP_D            KERNEL_DIR "sys/daemon/mssp"
 
 #ifndef CONFIG_D
 #define CONFIG_D            K_CONFIG_D
+#endif
+#ifndef MSSP_D
+#define MSSP_D              K_MSSP_D
 #endif
 
 #endif // __KERNEL_DAEMON_H__

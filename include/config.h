@@ -18,9 +18,8 @@
 #define CFG_LANGUAGE()              (CONFIG_D->query_string("language"))
 #define CFG_CREATED()               (CONFIG_D->query_string("created"))
 
-#define CFG_PTOTOCOL_MXP()          (CONFIG_D->query_int("protocol mxp"))
-#define CFG_PTOTOCOL_MCCP()         (CONFIG_D->query_int("protocol mccp"))
-#define CFG_PTOTOCOL_GMCP()         (CONFIG_D->query_int("protocol gmcp"))
+#define CFG_PTOTOCOL_MXP()          ((int) get_config(__RC_ENABLE_MXP__))
+#define CFG_PTOTOCOL_GMCP()         ((int) get_config(__RC_ENABLE_GMCP__))
 
 #define CFG_PORT_CHARSET(port)      (CONFIG_D->query_string("charset " + (port)))
 

@@ -29,3 +29,8 @@ object connect(int port)
 
     return login_ob;
 }
+
+mapping get_mud_stats()
+{
+    return MSSP_D->mssp_telopt();
+}
