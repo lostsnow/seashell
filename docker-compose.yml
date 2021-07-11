@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+
+  driver:
+    image: ghcr.io/fluffos/fluffos:master
+    restart: always
+    ports:
+      - '7000:7000'
+      - '7001:7001'
+      - '7002:7002'
+    volumes:
+      - ./:/fluffos/lib
+    working_dir: /fluffos/lib
+    command: /fluffos/lib/config.cfg
