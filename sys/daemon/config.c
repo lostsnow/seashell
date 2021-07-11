@@ -4,7 +4,6 @@
 
 inherit IH_PROPERTY;
 inherit IH_NAME;
-inherit IH_SAVE;
 
 #define LIB_CONFIG_FILE CONFIG_DIR + LIB_CFG
 
@@ -16,7 +15,8 @@ string query_config_file_name();
 
 void create()
 {
-    set_name(HIW + "配置精灵" + NOR, ({"CONFIG_D"}));
+    set_name(HIW + "配置精灵" + NOR);
+    set_id("CONFIG_D");
     load_config();
 }
 
@@ -165,7 +165,6 @@ string query_string(string index)
     if (!stringp(result = query(index))) {
         result = "";
     }
-
     return result;
 }
 

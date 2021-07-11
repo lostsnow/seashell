@@ -36,7 +36,7 @@ void set_id(string id)
     oid = id;
 }
 
-void set_name(string name, string *ids)
+varargs void set_name(string name, string *ids)
 {
     oname = name;
 
