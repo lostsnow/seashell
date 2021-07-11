@@ -20,7 +20,7 @@ nomask void add(mixed key, mixed value)
 varargs nomask mixed query(mixed key, int raw)
 {
     mixed value;
-    value = properties[value];
+    value = properties[key];
 
     if (raw) {
         return value;
