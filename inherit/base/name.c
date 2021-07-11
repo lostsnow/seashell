@@ -76,8 +76,6 @@ void set_temp_short_name(string name)
 
 varargs string short(int raw)
 {
-    string str;
-
     if (!raw && stringp(apply_short_name) && apply_short_name != "") {
         return apply_short_name;
     }

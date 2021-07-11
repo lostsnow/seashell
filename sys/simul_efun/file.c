@@ -29,10 +29,11 @@ mixed *separate_file(string file)
 
     for (i = 0; i < sizeof(list); i++) {
         if (list[i] == "" || list[i][0] == '#') {
-            continue;
+            list[i] = 0;
         }
     }
 
+    list -= ({ 0 });
     return list;
 }
 
