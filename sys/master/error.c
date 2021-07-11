@@ -68,7 +68,7 @@ string error_handler(mapping error, int caught)
         if (wizardp(this_player(1))) {
             tell_object(this_player(1), trace);
         } else {
-            tell_object(this_player(1), color_filter(DEFAULT_ERROR_MESSAGE()) + "\n");
+            tell_object(this_player(1), ansi_filter(DEFAULT_ERROR_MESSAGE()) + "\n");
         }
     }
 

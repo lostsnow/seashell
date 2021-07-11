@@ -4,6 +4,9 @@
 #include "simul_efun/ansi.c"
 #include "simul_efun/string.c"
 #include "simul_efun/time.c"
+
+#include "simul_efun/chinese.c"
+#include "simul_efun/message.c"
 #include "simul_efun/file.c"
 
 void create()

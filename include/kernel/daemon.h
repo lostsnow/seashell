@@ -8,6 +8,11 @@
 #define CONFIG_D            K_CONFIG_D
 #endif
 
+#define K_LOGIN_D           KERNEL_DIR "sys/daemon/login"
+#ifndef LOGIN_D
+#define LOGIN_D             K_LOGIN_D
+#endif
+
 #define K_MSSP_D            KERNEL_DIR "sys/daemon/mssp"
 #ifndef MSSP_D
 #define MSSP_D              K_MSSP_D

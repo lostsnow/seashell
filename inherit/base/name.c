@@ -31,12 +31,18 @@ string get_id()
     return oid;
 }
 
-void set_id(string id)
+string set_id(string id)
 {
-    oid = id;
+    if (!my_ids) {
+        my_ids = ({id});
+    } else if (member_array(id, my_ids) == -1) {
+        my_ids += ({id});
+    }
+
+    return oid = id;
 }
 
-varargs void set_name(string name, string *ids)
+varargs string set_name(string name, string *ids)
 {
     oname = name;
 
@@ -44,11 +50,13 @@ varargs void set_name(string name, string *ids)
         set_id(lower_case(ids[0]));
         my_ids = ids;
     }
+
+    return oname;
 }
 
-void set_temp_name(string name)
+string set_temp_name(string name)
 {
-    apply_name = name;
+    return apply_name = name;
 }
 
 varargs string name(int raw)
@@ -64,14 +72,14 @@ varargs string name(int raw)
     return oname;
 }
 
-void set_short_name(string name)
+string set_short_name(string name)
 {
-    short_name = name;
+    return short_name = name;
 }
 
-void set_temp_short_name(string name)
+string set_temp_short_name(string name)
 {
-    apply_short_name = name;
+    return apply_short_name = name;
 }
 
 varargs string short(int raw)
@@ -87,14 +95,14 @@ varargs string short(int raw)
     return short_name;
 }
 
-void set_long_name(string name)
+string set_long_name(string name)
 {
-    long_name = name;
+    return long_name = name;
 }
 
-void set_temp_long_name(string name)
+string set_temp_long_name(string name)
 {
-    apply_long_name = name;
+    return apply_long_name = name;
 }
 
 varargs string long(int raw)

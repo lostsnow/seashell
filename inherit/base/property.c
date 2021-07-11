@@ -1,19 +1,34 @@
 // K_IH_PROPERTY
 
+nomask mixed set(mixed key, mixed value);
+nomask mixed add(mixed key, mixed value);
+varargs nomask mixed query(mixed key, int raw);
+nomask int delete (mixed key);
+nomask mapping query_properties();
+nomask mixed set_temp(mixed key, mixed value);
+nomask mixed add_temp(mixed key, mixed value);
+varargs nomask mixed query_temp(mixed key, int raw);
+nomask int delete_temp(mixed key);
+nomask mapping query_temp_properties();
+
 mapping properties = ([]);
 nosave mapping temp_properties = ([]);
 
-nomask void set(mixed key, mixed value)
+nomask mixed set(mixed key, mixed value)
 {
-    properties[key] = value;
+    return properties[key] = value;
 }
 
-nomask void add(mixed key, mixed value)
+nomask mixed add(mixed key, mixed value)
 {
-    if (typeof(value) == typeof(properties[key])) {
-        if (!functionp(value)) {
-            properties[key] += value;
+    mixed old;
+
+    old = query(key, 1);
+    if (typeof(value) == typeof(old) && !functionp(value)) {
+        if (!old) {
+            return set(key, value);
         }
+        return set(key, old + value);
     }
 }
 
@@ -29,9 +44,9 @@ varargs nomask mixed query(mixed key, int raw)
     return evaluate(value, this_object());
 }
 
-nomask void delete (mixed key)
+nomask int delete (mixed key)
 {
-    map_delete(properties, key);
+    return map_delete(properties, key);
 }
 
 nomask mapping query_properties()
@@ -39,17 +54,21 @@ nomask mapping query_properties()
     return properties;
 }
 
-nomask void set_temp(mixed key, mixed value)
+nomask mixed set_temp(mixed key, mixed value)
 {
-    temp_properties[key] = value;
+    return temp_properties[key] = value;
 }
 
-nomask void add_temp(mixed key, mixed value)
+nomask mixed add_temp(mixed key, mixed value)
 {
-    if (typeof(value) == typeof(temp_properties[key])) {
-        if (!functionp(value)) {
-            temp_properties[key] += value;
+    mixed old;
+
+    old = query_temp(key, 1);
+    if (typeof(value) == typeof(old) && !functionp(value)) {
+        if (!old) {
+            return set_temp(key, value);
         }
+        return set_temp(key, old + value);
     }
 }
 
@@ -65,9 +84,9 @@ varargs nomask mixed query_temp(mixed key, int raw)
     return evaluate(value, this_object());
 }
 
-nomask void delete_temp(mixed key)
+nomask int delete_temp(mixed key)
 {
-    map_delete(temp_properties, key);
+    return map_delete(temp_properties, key);
 }
 
 nomask mapping query_temp_properties()

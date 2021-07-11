@@ -42,7 +42,7 @@ void assure_file(string file)
     string path, *dir;
     int i;
 
-    if (!file_exists(file)) {
+    if (file_exists(file)) {
         return;
     }
 
@@ -84,7 +84,7 @@ void cat(string file)
     write(read_file(file));
 }
 
-void color_cat(string file)
+void ansi_cat(string file)
 {
-    write(color_filter(read_file(file)));
+    write(ansi_filter(read_file(file)));
 }

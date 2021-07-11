@@ -2,7 +2,7 @@
 
 #include <ansi.h>
 
-string color_filter(string content)
+string ansi_filter(string content)
 {
     if (!content) {
         return "";

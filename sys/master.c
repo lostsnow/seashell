@@ -3,6 +3,7 @@
 #include "master/uid.c"
 #include "master/error.c"
 #include "master/preload.c"
+#include "master/valid.c"
 
 void create()
 {
