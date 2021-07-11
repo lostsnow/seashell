@@ -1,3 +1,5 @@
+// master: preload applies
+
 // master apply::epilog
 // return file list to preload
 string *epilog(int load_empty)

@@ -1,3 +1,5 @@
+// LOGIN_OB
+
 #include <config.h>
 
 void logon()

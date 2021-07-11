@@ -1,3 +1,4 @@
+// sefun: time
 #include <localtime.h>
 
 string datetime(int t)

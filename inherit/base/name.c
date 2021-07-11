@@ -1,4 +1,4 @@
-// EX_NAME
+// K_IH_NAME
 
 #include <ansi.h>
 

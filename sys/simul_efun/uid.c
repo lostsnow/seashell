@@ -1,3 +1,5 @@
+// sefun: uid
+
 // author_file should return the name of the author of a specific file.
 string author_file(string file)
 {

@@ -1,4 +1,4 @@
-// IH_BASE
+// K_IH_PROPERTY
 
 mapping properties = ([]);
 nosave mapping temp_properties = ([]);

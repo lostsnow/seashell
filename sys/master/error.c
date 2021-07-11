@@ -1,4 +1,4 @@
-// master: error
+// master: error applies
 
 #include <config.h>
 
@@ -7,6 +7,7 @@
 string standard_trace(mapping error, int caught);
 string full_trace(mapping error, int caught);
 
+// master apply::crash
 // This is called when there is a driver segmentation fault or a bus error, etc.
 void crash(string error, object command_giver, object current_object)
 {
@@ -44,6 +45,7 @@ void crash(string error, object command_giver, object current_object)
     }
 }
 
+// master apply::log_error
 void log_error(string file, string message)
 {
     if (this_player(1)) {
@@ -55,6 +57,7 @@ void log_error(string file, string message)
     log_time("error.log", message);
 }
 
+// master apply::error_handler
 string error_handler(mapping error, int caught)
 {
     string trace, full_trace;

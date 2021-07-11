@@ -1,4 +1,4 @@
-// efun: string
+// sefun: string
 
 int atoi(string str)
 {

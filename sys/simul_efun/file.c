@@ -1,4 +1,4 @@
-// efun: error
+// sefun: file
 
 void log_error(string message);
 
