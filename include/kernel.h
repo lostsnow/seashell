@@ -37,8 +37,8 @@
 #define ROOT_UID            "Root"
 #define BACKBONE_UID        "Backbone"
 
-#include <kernel/object.h>
-#include <kernel/inherit.h>
 #include <kernel/daemon.h>
+#include <kernel/inherit.h>
+#include <kernel/object.h>
 
 #endif // __KERNEL_H__
