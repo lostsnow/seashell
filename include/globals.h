@@ -9,8 +9,4 @@
 
 #include <kernel.h>
 
-#include <kernel/object.h>
-#include <kernel/inherit.h>
-#include <kernel/daemon.h>
-
 #endif // __GLOBALS_H__

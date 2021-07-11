@@ -38,5 +38,7 @@
 #define BACKBONE_UID        "Backbone"
 
 #include <kernel/object.h>
+#include <kernel/inherit.h>
+#include <kernel/daemon.h>
 
 #endif // __KERNEL_H__

@@ -29,7 +29,7 @@ varargs nomask mixed query(mixed key, int raw)
     return evaluate(value, this_object());
 }
 
-void delete (mixed key)
+nomask void delete (mixed key)
 {
     map_delete(properties, key);
 }
@@ -65,7 +65,7 @@ varargs nomask mixed query_temp(mixed key, int raw)
     return evaluate(value, this_object());
 }
 
-void delete_temp(mixed key)
+nomask void delete_temp(mixed key)
 {
     map_delete(temp_properties, key);
 }
