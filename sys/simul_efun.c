@@ -9,6 +9,8 @@
 #include "simul_efun/message.c"
 #include "simul_efun/file.c"
 
+#include "simul_efun/std/json.c"
+
 void create()
 {
     efun::write("simul_efun: loaded successfully.\n");

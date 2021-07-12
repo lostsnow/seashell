@@ -271,6 +271,7 @@ varargs void enter_world(object ob, object user, int silent)
 
     write("你连线进入" + LOCAL_MUD_NAME() + "。\n\n");
 
+    user->send_char_info();
     // @TODO
 }
 

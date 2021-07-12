@@ -4,6 +4,8 @@ inherit IH_PROPERTY;
 inherit IH_SAVE;
 inherit IH_NAME;
 
+void send_gmcp(string key, mixed value);
+
 private nosave object login_ob;
 private nosave int net_dead;                    // 标志：是否断开了连接
 
@@ -47,6 +49,7 @@ void net_dead_clean()
     if (objectp(login_ob)) {
         destruct(login_ob);
     }
+
     set("last_online", time());
     set("last_login_ip", query_ip_number(login_ob));
     set("last_saved_at", time());
@@ -78,4 +81,15 @@ object get_login_ob()
 object set_login_ob(object ob)
 {
     return login_ob = ob;
+}
+
+void send_char_info() {
+    send_gmcp("char.info", (["id": get_id(), "short": short()]));
+}
+
+void send_gmcp(string key, mixed value)
+{
+    if (has_gmcp()) {
+        efun::send_gmcp(key + " " + json_encode(value));
+    }
 }
