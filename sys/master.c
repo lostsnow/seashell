@@ -12,6 +12,12 @@ void create()
 
 void connect_init(int port)
 {
+    string charset;
+    charset = CFG_PORT_CHARSET(itoa(port));
+
+    if (charset != "") {
+        set_encoding(charset);
+    }
 }
 
 object connect(int port)
