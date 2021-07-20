@@ -21,7 +21,7 @@ mapping mssp_telopt()
         "CRAWL DELAY"           : "24",
         "HOSTNAME"              : CFG_HOSTNAME(),
         "PORT"                  : itoa(LOCAL_MUD_PORT()),
-        "CODEBASE"              : "FluffOS v2019",
+        "CODEBASE"              : "FluffOS v2021",
         "CONTACT"               : CFG_AUTHOR(),
         "CREATED"               : CFG_CREATED(),
         "IP"                    : CFG_HOSTNAME(),
