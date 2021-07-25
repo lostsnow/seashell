@@ -184,7 +184,7 @@ private void confirm_id(string yn, object ob)
 
     if (lower_case(yn[0..0]) != "y") {
         write("好吧，那么请重新输入您的 ID：");
-        input_to("get_id", ob);
+        input_to("get_uid", ob);
         return;
     }
 
