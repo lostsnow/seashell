@@ -1,6 +1,7 @@
 // K_IH_NAME
 
 #include <ansi.h>
+#include <name.h>
 
 nosave string *my_ids;
 

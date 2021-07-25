@@ -37,6 +37,11 @@
 #define ROOT_UID            "Root"
 #define BACKBONE_UID        "Backbone"
 
+// User Levels
+#define USER_LEVEL_NAME_PLAYER      "(player)"
+#define USER_LEVEL_NAME_WIZARD      "(wizard)"
+#define USER_LEVEL_NAME_ADMIN       "(admin)"
+
 #include <kernel/daemon.h>
 #include <kernel/inherit.h>
 #include <kernel/object.h>

@@ -3,6 +3,8 @@
 inherit IH_PROPERTY;
 inherit IH_SAVE;
 inherit IH_NAME;
+inherit IH_COMMAND;
+inherit IH_MESSAGE;
 
 void send_gmcp(string key, mixed value);
 
@@ -18,6 +20,12 @@ void setup()
 {
     seteuid(getuid(this_object()));
     set_heart_beat(1);
+    enable_player_commands();
+}
+
+int is_player()
+{
+    return clonep();
 }
 
 // reconnect: called by the LOGIN_D when a netdead player reconnects.

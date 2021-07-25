@@ -3,6 +3,16 @@
 #ifndef __KERNEL_INHERIT_H__
 #define __KERNEL_INHERIT_H__
 
+#define K_IH_COMMAND        KERNEL_DIR "inherit/base/command"
+#ifndef IH_COMMAND
+#define IH_COMMAND          K_IH_COMMAND
+#endif
+
+#define K_IH_MESSAGE        KERNEL_DIR "inherit/base/message"
+#ifndef IH_MESSAGE
+#define IH_MESSAGE          K_IH_MESSAGE
+#endif
+
 #define K_IH_NAME           KERNEL_DIR "inherit/base/name"
 #ifndef IH_NAME
 #define IH_NAME             K_IH_NAME
