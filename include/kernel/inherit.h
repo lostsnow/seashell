@@ -3,6 +3,11 @@
 #ifndef __KERNEL_INHERIT_H__
 #define __KERNEL_INHERIT_H__
 
+#define K_IH_CLEAN_UP       KERNEL_DIR "inherit/base/clean_up"
+#ifndef IH_CLEAN_UP
+#define IH_CLEAN_UP         K_IH_CLEAN_UP
+#endif
+
 #define K_IH_COMMAND        KERNEL_DIR "inherit/base/command"
 #ifndef IH_COMMAND
 #define IH_COMMAND          K_IH_COMMAND

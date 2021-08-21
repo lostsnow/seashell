@@ -1,5 +1,7 @@
 #include <ansi.h>
 
+inherit IH_CLEAN_UP;
+
 int main(object me, string arg)
 {
     tell_object(me, MAG + "#" + HIY + "色彩列表" + NOR + MAG + "#\n" + NOR);
