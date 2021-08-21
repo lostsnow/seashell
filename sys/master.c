@@ -1,5 +1,6 @@
 // K_MASTER_OB
 
+#include "master/flag.c"
 #include "master/uid.c"
 #include "master/error.c"
 #include "master/preload.c"
@@ -16,6 +17,7 @@ void connect_init(int port)
     charset = CFG_PORT_CHARSET(itoa(port));
 
     if (charset != "") {
+        debug_message("[K_MASTER_OB] set encoding " + charset + " for port " + itoa(port), DEBUG_LEVEL_DEBUG);
         set_encoding(charset);
     }
 }

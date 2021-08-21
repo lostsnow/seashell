@@ -46,4 +46,13 @@
 #include <kernel/inherit.h>
 #include <kernel/object.h>
 
+// Debug level
+#define DEBUG_LEVEL_ERROR   1
+#define DEBUG_LEVEL_WARN    2
+#define DEBUG_LEVEL_INFO    4
+#define DEBUG_LEVEL_DEBUG   8
+#define DEBUG_LEVEL_TRACE   16
+
+#define DEBUG_LEVEL()       ((int) MASTER_OB->debug_level())
+
 #endif // __KERNEL_H__
