@@ -54,14 +54,14 @@ void net_dead_clean()
         tell_room(environment(), name() + "断线超过 1 分钟，自动退出这个世界。\n");
     }
 
-    if (objectp(login_ob)) {
-        destruct(login_ob);
-    }
-
     set("last_online", time());
     set("last_login_ip", query_ip_number(login_ob));
     set("last_saved_at", time());
     save();
+
+    if (objectp(login_ob)) {
+        destruct(login_ob);
+    }
     destruct(this_object());
 }
 
