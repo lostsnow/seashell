@@ -77,11 +77,13 @@ private void get_passwd(string pass, object ob)
 
     if (!stringp(my_pass) || crypt(pass, my_pass) != my_pass) {
         ob->add_password_tries();
+
         if (ob->get_password_tries() < 3) {
             write("密码错误！请重新输入：");
             input_to("get_passwd", 1, ob);
             return;
         }
+
         write("密码错误！\n");
         destruct(ob);
         return;
@@ -155,7 +157,10 @@ private void confirm_relogin(string yn, object ob, object user)
     old_link = user->get_login_ob();
 
     if (old_link) {
-        exec(old_link, user);
+        if (interactive(user)) {
+            exec(old_link, user);
+        }
+
         destruct(old_link);
     }
 
@@ -169,7 +174,7 @@ varargs void reconnect(object ob, object user, int silent)
     exec(user, ob);
     user->reconnect();
 
-    if (!silent) {
+    if (!silent && environment(user)) {
         tell_room(environment(user), HIW + user->name() + NOR + "重新连线回到这个世界。\n", ({user}));
     }
 }
@@ -256,6 +261,9 @@ private object init_user(object ob)
 
 varargs void enter_world(object ob, object user, int silent)
 {
+    user->set_login_ob(ob);
+    ob->set_user_ob(user);
+
     if (interactive(ob)) {
         exec(user, ob);
     }
