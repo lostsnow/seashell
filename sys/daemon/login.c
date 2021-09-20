@@ -37,7 +37,7 @@ void logon(object ob)
 {
     ansi_cat(WELCOME);
 
-    ansi_printf("您的$HIY$英文名字$NOR$（$HIY$%d $NOR$到$HIY$ %d $NOR$个英文字母，新玩家可以选择一喜欢的名字）：",
+    ansi_printf("您的%^HIY%^英文名字%^NOR%^（%^HIY%^%d %^NOR%^到%^HIY%^ %d %^NOR%^个英文字母，新玩家可以选择一喜欢的名字）：",
         min_length_id, max_length_id);
     input_to("get_uid", ob);
 }
@@ -47,7 +47,7 @@ private void get_uid(string arg, object ob)
     arg = lower_case(arg);
 
     if (!check_legal_id(arg)) {
-        ansi_write("您的$HIY$英文名字$NOR$：");
+        ansi_write("您的%^HIY%^英文名字%^NOR%^：");
         input_to("get_uid", ob);
         return;
     }
@@ -66,7 +66,7 @@ private void get_uid(string arg, object ob)
         return;
     }
 
-    ansi_printf("使用[$HIC$%s$NOR$]这个 ID 将会创造一个新的角色，您确定吗($HIG$y$NOR$/$HIR$n$NOR$)？", ob->get_id());
+    ansi_printf("使用[%^HIC%^%s%^NOR%^]这个 ID 将会创造一个新的角色，您确定吗(%^HIG%^y%^NOR%^/%^HIR%^n%^NOR%^)？", ob->get_id());
     input_to("confirm_id", ob);
 }
 
@@ -104,7 +104,7 @@ private void check_logon(object ob)
             return;
         }
 
-        ansi_write("$WHT$您要将另一个连线中的相同角色赶出去，取而代之吗？（$HIY$y/n$NOR$$WHT$）$NOR$");
+        ansi_write("%^WHT%^您要将另一个连线中的相同角色赶出去，取而代之吗？（%^HIY%^y/n%^NOR%^%^WHT%^）%^NOR%^");
         input_to("confirm_relogin", ob, user);
         return;
     }
@@ -112,13 +112,13 @@ private void check_logon(object ob)
     user = init_user(ob);
 
     if (!objectp(user)) {
-        ansi_write("$HIR$无法初始化角色，你可以尝试重新登录或是和巫师联系。$NOR$\n");
+        ansi_write("%^HIR%^无法初始化角色，你可以尝试重新登录或是和巫师联系。%^NOR%^\n");
         return;
     }
 
     if (!user->restore()) {
         destruct(user);
-        ansi_write("$HIR$无法读取你的数据档案，您需要和巫师联系。$NOR$\n");
+        ansi_write("%^HIR%^无法读取你的数据档案，您需要和巫师联系。%^NOR%^\n");
         destruct(ob);
     }
 
@@ -133,7 +133,7 @@ private void confirm_relogin(string yn, object ob, object user)
     object old_link;
 
     if (!yn || yn == "") {
-        ansi_write("$WHT$您要将另一个连线中的相同角色赶出去，取而代之吗？（$NOR$$HIY$y/n$NOR$$WHT$$NOR$）");
+        ansi_write("%^WHT%^您要将另一个连线中的相同角色赶出去，取而代之吗？（%^NOR%^%^HIY%^y/n%^NOR%^%^WHT%^%^NOR%^）");
         input_to("confirm_relogin", ob, user);
         return;
     }
@@ -182,7 +182,7 @@ varargs void reconnect(object ob, object user, int silent)
 private void confirm_id(string yn, object ob)
 {
     if (yn == "") {
-        ansi_write("使用这个 ID 将会创造一个新的角色，您确定吗($HIG$y$NOR$/$HIR$n$NOR$)？");
+        ansi_write("使用这个 ID 将会创造一个新的角色，您确定吗(%^HIG%^y%^NOR%^/%^HIR%^n%^NOR%^)？");
         input_to("confirm_id", ob);
         return;
     }
@@ -200,13 +200,13 @@ private void confirm_id(string yn, object ob)
 private void new_password(string pass, object ob)
 {
     if (strlen(pass) < 5) {
-        ansi_write("密码的长度至少要$HIY$五$NOR$个字符，请重设您的$HIW$密码$NOR$：");
+        ansi_write("密码的长度至少要%^HIY%^五%^NOR%^个字符，请重设您的%^HIW%^密码%^NOR%^：");
         input_to("new_password", 1, ob);
         return;
     }
 
     ob->set_temp_password(crypt(pass, 0));
-    ansi_write("请再输入一次您的$HIW$密码$NOR$，以确认您没记错：");
+    ansi_write("请再输入一次您的%^HIW%^密码%^NOR%^，以确认您没记错：");
     input_to("confirm_password", 1, ob);
 }
 
@@ -216,14 +216,14 @@ private void confirm_password(string pass, object ob)
     old_pass = ob->get_temp_password();
 
     if (crypt(pass, old_pass) != old_pass) {
-        ansi_write("您两次输入的密码不同，请重新设定一次$HIW$密码$NOR$：");
+        ansi_write("您两次输入的密码不同，请重新设定一次%^HIW%^密码%^NOR%^：");
         input_to("new_password", 1, ob);
         return;
     }
 
     ob->set_password(old_pass);
 
-    ansi_printf("您的$HIY$中文名字$NOR$（$HIY$ %d $NOR$到$HIY$ %d $NOR$个汉字）：",
+    ansi_printf("您的%^HIY%^中文名字%^NOR%^（%^HIY%^ %d %^NOR%^到%^HIY%^ %d %^NOR%^个汉字）：",
         min_length_name, max_length_name);
     input_to("get_name", ob);
 }
@@ -233,7 +233,7 @@ private void get_name(string arg, object ob)
     object user;
 
     if (!check_legal_name(arg)) {
-        ansi_write("您的$HIY$中文名字$NOR$：");
+        ansi_write("您的%^HIY%^中文名字%^NOR%^：");
         input_to("get_name", ob);
         return;
     }
@@ -291,13 +291,13 @@ int check_legal_id(string id)
 
     while (i--) {
         if (id[i] < 'a' || id[i] > 'z') {
-            ansi_write("对不起，你的英文名字只能用$HIY$英文字母$NOR$。\n");
+            ansi_write("对不起，你的英文名字只能用%^HIY%^英文字母%^NOR%^。\n");
             return 0;
         }
     }
 
     if (len < min_length_id || len > max_length_id) {
-        ansi_printf("对不起，你的英文名字必须是$HIY$ %d $NOR$到$HIY$ %d $NOR$个英文字母。\n",
+        ansi_printf("对不起，你的英文名字必须是%^HIY%^ %d %^NOR%^到%^HIY%^ %d %^NOR%^个英文字母。\n",
             min_length_id, max_length_id);
         return 0;
     }
@@ -310,14 +310,14 @@ int check_legal_name(string name)
     int len;
 
     if (!is_chinese(name)) {
-        ansi_write("对不起，请您用$HIY$「中文」$NOR$取名字。\n");
+        ansi_write("对不起，请您用%^HIY%^「中文」%^NOR%^取名字。\n");
         return 0;
     }
 
     len = strlen(name);
 
     if (len < min_length_name || len > max_length_name) {
-        ansi_printf("对不起，你的中文名字必须是$HIY$ %d $NOR$到$HIY$ %d $NOR$个汉字。\n",
+        ansi_printf("对不起，你的中文名字必须是%^HIY%^ %d %^NOR%^到%^HIY%^ %d %^NOR%^个汉字。\n",
             min_length_name, max_length_name);
         return 0;
     }

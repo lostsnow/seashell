@@ -2,57 +2,109 @@
 
 #include <ansi.h>
 
+// *INDENT-OFF*
+mapping terminal_codes = ([
+    // Foreground color
+    "BLK":    BLK,
+    "RED":    RED,
+    "GRN":    GRN,
+    "YEL":    YEL,
+    "BLU":    BLU,
+    "MAG":    MAG,
+    "CYN":    CYN,
+    "WHT":    WHT,
+    // Hi Intensity Foreground Colors
+    "HIK":    HIK,
+    "HIR":    HIR,
+    "HIG":    HIG,
+    "HIY":    HIY,
+    "HIB":    HIB,
+    "HIM":    HIM,
+    "HIC":    HIC,
+    "HIW":    HIW,
+    // Background color
+    "BBLK":    BBLK,
+    "BRED":    BRED,
+    "BGRN":    BGRN,
+    "BYEL":    BYEL,
+    "BBLU":    BBLU,
+    "BMAG":    BMAG,
+    "BCYN":    BCYN,
+    "BWHT":    BWHT,
+    // High Intensity Background Colors
+    "HBBLK":    HBBLK,
+    "HBRED":    HBRED,
+    "HBGRN":    HBGRN,
+    "HBYEL":    HBYEL,
+    "HBBLU":    HBBLU,
+    "HBMAG":    HBMAG,
+    "HBCYN":    HBCYN,
+    "HBWHT":    HBWHT,
+    // Reset
+    "NOR":     NOR,
+    // Additional
+    "U":       U,
+    "BLINK":   BLINK,
+    "REV":     REV,
+    "HIREV":   HIREV,
+    "BOLD":    BOLD
+]);
+
+mapping no_color_codes = ([
+    // Foreground color
+    "BLK":    "",
+    "RED":    "",
+    "GRN":    "",
+    "YEL":    "",
+    "BLU":    "",
+    "MAG":    "",
+    "CYN":    "",
+    "WHT":    "",
+    // Hi Intensity Foreground Colors
+    "HIK":    "",
+    "HIR":    "",
+    "HIG":    "",
+    "HIY":    "",
+    "HIB":    "",
+    "HIM":    "",
+    "HIC":    "",
+    "HIW":    "",
+    // Background color
+    "BBLK":    "",
+    "BRED":    "",
+    "BGRN":    "",
+    "BYEL":    "",
+    "BBLU":    "",
+    "BMAG":    "",
+    "BCYN":    "",
+    "BWHT":    "",
+    // High Intensity Background Colors
+    "HBBLK":    "",
+    "HBRED":    "",
+    "HBGRN":    "",
+    "HBYEL":    "",
+    "HBBLU":    "",
+    "HBMAG":    "",
+    "HBCYN":    "",
+    "HBWHT":    "",
+    // Reset
+    "NOR":     "",
+    // Additional
+    "U":       "",
+    "BLINK":   "",
+    "REV":     "",
+    "HIREV":   "",
+    "BOLD":    ""
+]);
+// *INDENT-ON*
+
 string ansi_filter(string content)
 {
     if (!content) {
         return "";
     }
 
-    // Foreground color
-    content = replace_string(content, "$BLK$", BLK);
-    content = replace_string(content, "$RED$", RED);
-    content = replace_string(content, "$GRN$", GRN);
-    content = replace_string(content, "$YEL$", YEL);
-    content = replace_string(content, "$BLU$", BLU);
-    content = replace_string(content, "$MAG$", MAG);
-    content = replace_string(content, "$CYN$", CYN);
-    content = replace_string(content, "$WHT$", WHT);
-    // Hi Intensity Foreground Colors
-    content = replace_string(content, "$HIK$", HIK);
-    content = replace_string(content, "$HIR$", HIR);
-    content = replace_string(content, "$HIG$", HIG);
-    content = replace_string(content, "$HIY$", HIY);
-    content = replace_string(content, "$HIB$", HIB);
-    content = replace_string(content, "$HIM$", HIM);
-    content = replace_string(content, "$HIC$", HIC);
-    content = replace_string(content, "$HIW$", HIW);
-    // Background color
-    content = replace_string(content, "$BBLK$", BBLK);
-    content = replace_string(content, "$BRED$", BRED);
-    content = replace_string(content, "$BGRN$", BGRN);
-    content = replace_string(content, "$BYEL$", BYEL);
-    content = replace_string(content, "$BBLU$", BBLU);
-    content = replace_string(content, "$BMAG$", BMAG);
-    content = replace_string(content, "$BCYN$", BCYN);
-    content = replace_string(content, "$BWHT$", BWHT);
-    // High Intensity Background Colors
-    content = replace_string(content, "$HBBLK$", HBBLK);
-    content = replace_string(content, "$HBRED$", HBRED);
-    content = replace_string(content, "$HBGRN$", HBGRN);
-    content = replace_string(content, "$HBYEL$", HBYEL);
-    content = replace_string(content, "$HBBLU$", HBBLU);
-    content = replace_string(content, "$HBMAG$", HBMAG);
-    content = replace_string(content, "$HBCYN$", HBCYN);
-    content = replace_string(content, "$HBWHT$", HBWHT);
-    // Reset
-    content = replace_string(content, "$NOR$", NOR);
-    // Additional
-    content = replace_string(content, "$U$", U);
-    content = replace_string(content, "$BLINK$", BLINK);
-    content = replace_string(content, "$REV$", REV);
-    content = replace_string(content, "$HIREV$", HIREV);
-    content = replace_string(content, "$BOLD$", BOLD);
-    return content;
+    return terminal_colour(content, terminal_codes);;
 }
 
 string remove_ansi(string content)
@@ -61,50 +113,5 @@ string remove_ansi(string content)
         return "";
     }
 
-    // Foreground color
-    content = replace_string(content, BLK, "");
-    content = replace_string(content, RED, "");
-    content = replace_string(content, GRN, "");
-    content = replace_string(content, YEL, "");
-    content = replace_string(content, BLU, "");
-    content = replace_string(content, MAG, "");
-    content = replace_string(content, CYN, "");
-    content = replace_string(content, WHT, "");
-    // Hi Intensity Foreground Colors
-    content = replace_string(content, HIK, "");
-    content = replace_string(content, HIR, "");
-    content = replace_string(content, HIG, "");
-    content = replace_string(content, HIY, "");
-    content = replace_string(content, HIB, "");
-    content = replace_string(content, HIM, "");
-    content = replace_string(content, HIC, "");
-    content = replace_string(content, HIW, "");
-    // Background color
-    content = replace_string(content, BBLK, "");
-    content = replace_string(content, BRED, "");
-    content = replace_string(content, BGRN, "");
-    content = replace_string(content, BYEL, "");
-    content = replace_string(content, BBLU, "");
-    content = replace_string(content, BMAG, "");
-    content = replace_string(content, BCYN, "");
-    content = replace_string(content, BWHT, "");
-    // High Intensity Background Colors
-    content = replace_string(content, HBBLK, "");
-    content = replace_string(content, HBRED, "");
-    content = replace_string(content, HBGRN, "");
-    content = replace_string(content, HBYEL, "");
-    content = replace_string(content, HBBLU, "");
-    content = replace_string(content, HBMAG, "");
-    content = replace_string(content, HBCYN, "");
-    content = replace_string(content, HBWHT, "");
-    // Reset
-    content = replace_string(content, NOR, "");
-    // Additional
-    content = replace_string(content, U, "");
-    content = replace_string(content, BLINK, "");
-    content = replace_string(content, REV, "");
-    content = replace_string(content, HIREV, "");
-    content = replace_string(content, BOLD, "");
-
-    return content;
+    return terminal_colour(content, no_color_codes);;
 }

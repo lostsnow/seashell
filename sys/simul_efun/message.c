@@ -12,15 +12,14 @@ void ansi_write(string content)
     write(ansi_filter(content));
 }
 
-varargs void ansi_printf(string msg, mixed* args...)
-{
-    msg = sprintf(msg, args...);
-    ansi_write(msg);
-}
-
 varargs string ansi_sprintf(string msg, mixed* args...)
 {
-    return ansi_filter(sprintf(msg, args...));
+    return sprintf(ansi_filter(msg), args...);
+}
+
+varargs void ansi_printf(string msg, mixed* args...)
+{
+    write(ansi_sprintf(msg, args...));
 }
 
 varargs void debug_message(string msg, int lvl)
