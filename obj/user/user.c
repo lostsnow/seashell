@@ -1,11 +1,7 @@
 // USER_OB
 
-inherit IH_PROPERTY;
+inherit IH_CHAR;
 inherit IH_SAVE;
-inherit IH_NAME;
-inherit IH_COMMAND;
-inherit IH_MESSAGE;
-inherit IH_MORE;
 
 void send_gmcp(string key, mixed value);
 

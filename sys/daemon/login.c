@@ -4,6 +4,11 @@
 #include <config.h>
 #include <login.h>
 
+#ifndef START_ROOM
+#define START_ROOM VOID_OB
+#endif
+
+
 inherit IH_NAME;
 
 private void get_uid(string arg, object ob);
@@ -280,7 +285,7 @@ varargs void enter_world(object ob, object user, int silent)
     write("你连线进入" + LOCAL_MUD_NAME() + "。\n\n");
 
     user->send_char_info();
-    // @TODO
+    user->move(START_ROOM);
 }
 
 int check_legal_id(string id)
