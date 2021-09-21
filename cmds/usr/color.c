@@ -4,7 +4,7 @@ inherit IH_CLEAN_UP;
 
 int main(object me, string arg)
 {
-    tell_object(me, MAG + "#" + HIY + "色彩列表" + NOR + MAG + "#\n" + NOR);
+    tell_object(me, MAG + "#" + HIY + "颜色列表" + NOR + MAG + "#\n" + NOR);
     tell_object(me,
         "  黑色- BLK" + BLK + "■■■" + NOR + " HIK" + HIK + "■■■" + NOR +
         "  HBBLK" + HBBLK + "■■■" + NOR + " BBLK" + BBLK + "■■■" + NOR + "\n" +
@@ -29,9 +29,10 @@ string help(object me)
 {
 // *INDENT-OFF*
     return @HELP
-指令格式 : color
+命令格式：color
 
-这个指令可以让你知道游戏中各种色彩的 ANSI 控制字符及色彩效果，从而方便您选择中意的色彩。
+这个命令可以让你知道游戏中各种颜色的 ANSI 控制字符及颜色效果，
+从而方便您选择中意的颜色。
 HELP;
 // *INDENT-ON*
 }

@@ -2,8 +2,30 @@
 
 void log_error(string message);
 
-int file_exists(string str) {
+int file_exists(string str)
+{
     return (file_size(str) > -1);
+}
+
+int file_lines(string file)
+{
+    int i;
+    int jmp;
+
+    i = 65536;
+    jmp = i / 2;
+
+    while (jmp) {
+        if (read_file(file, i, 1)) {
+            i += jmp;
+        } else {
+            i -= jmp;
+        }
+
+        jmp /= 2;
+    }
+
+    return i - 1;
 }
 
 mixed *separate_file(string file)
@@ -12,8 +34,7 @@ mixed *separate_file(string file)
     string str;
     int i;
 
-    if (!file_exists(file))
-    {
+    if (!file_exists(file)) {
         log_error("file " + file + " not found\n");
         return ({});
     }

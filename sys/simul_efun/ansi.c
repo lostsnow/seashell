@@ -115,3 +115,12 @@ string remove_ansi(string content)
 
     return terminal_colour(content, no_color_codes);;
 }
+
+string ansi(string color, string content)
+{
+    if (color == "") {
+        return ansi_filter(content);
+    }
+
+    return ansi_filter(sprintf("%s%s%s", "%^" + upper_case(color) + "%^", content, "%^NOR%^"));
+}
