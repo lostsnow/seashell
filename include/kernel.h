@@ -26,6 +26,9 @@
 #ifndef HELP_DIR
 #define HELP_DIR            "/doc/help/"
 #endif
+#ifndef HELP_DIRS
+#define HELP_DIRS            ({ HELP_DIR })
+#endif
 
 // Config files
 #define PRELOAD_CFG         "preload.cfg"
