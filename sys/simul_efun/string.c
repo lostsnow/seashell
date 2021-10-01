@@ -83,3 +83,17 @@ string remove_sub(string s_str, string m_str)
     m_str = implode(slist, ",");
     return m_str;
 }
+
+string random_string(int len)
+{
+    string rstr = "";
+    string str = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    int idx;
+
+    while (len-- > 0) {
+        idx = secure_random(62);
+        rstr += str[idx..idx];
+    }
+
+    return rstr;
+}
