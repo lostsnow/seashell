@@ -25,8 +25,8 @@ private object init_user(object ob);
 private varargs void enter_world(object ob, object user, int silent);
 
 void fail(object ob, string err, string msg);
-int check_legal_id(string id);
-int check_legal_name(string name);
+int check_legal_id(string id, int is_gmcp);
+int check_legal_name(string name, int is_gmcp);
 
 #define min_length_id 3
 #define max_length_id 16
@@ -57,7 +57,7 @@ private void get_uid(string arg, object ob)
 
     arg = lower_case(arg);
 
-    if (!check_legal_id(arg)) {
+    if (!check_legal_id(arg, 0)) {
         ansi_write("您的%^HIY%^英文名字%^NOR%^：");
         input_to("get_uid", ob);
         return;
@@ -263,7 +263,7 @@ private void get_name(string arg, object ob)
 {
     object user;
 
-    if (!check_legal_name(arg)) {
+    if (!check_legal_name(arg, ob->is_gmcp())) {
         if (ob->is_gmcp()) {
             fail(ob, "ERR_REGISTER", sprintf("中文名字必须是 %d 到 %d 个汉字", min_length_name, max_length_name));
         } else {
@@ -328,7 +328,7 @@ void gmcp_register(object ob, string user_id, string user_passwd, string user_na
 {
     user_id = lower_case(user_id);
 
-    if (!check_legal_id(user_id)) {
+    if (!check_legal_id(user_id, 1)) {
         fail(ob, "ERR_REGISTER", sprintf("英文名字必须是 %d 到 %d 个英文字母", min_length_id, max_length_id));
         return;
     }
@@ -349,7 +349,7 @@ void gmcp_logon(object ob, string user_id, string user_passwd)
 {
     user_id = lower_case(user_id);
 
-    if (!check_legal_id(user_id)) {
+    if (!check_legal_id(user_id, 1)) {
         fail(ob, "ERR_LOGIN", "登录信息有误，请重试。");
         return;
     }
@@ -410,7 +410,7 @@ void fail(object ob, string err, string msg)
     destruct(ob);
 }
 
-int check_legal_id(string id)
+int check_legal_id(string id, int is_gmcp)
 {
     int i, len;
     i = strlen(id);
@@ -418,34 +418,46 @@ int check_legal_id(string id)
 
     while (i--) {
         if (id[i] < 'a' || id[i] > 'z') {
-            ansi_write("对不起，你的英文名字只能用%^HIY%^英文字母%^NOR%^。\n");
+            if (!is_gmcp) {
+                ansi_write("对不起，你的英文名字只能用%^HIY%^英文字母%^NOR%^。\n");
+            }
+
             return 0;
         }
     }
 
     if (len < min_length_id || len > max_length_id) {
-        ansi_printf("对不起，你的英文名字必须是%^HIY%^ %d %^NOR%^到%^HIY%^ %d %^NOR%^个英文字母。\n",
-            min_length_id, max_length_id);
+        if (!is_gmcp) {
+            ansi_printf("对不起，你的英文名字必须是%^HIY%^ %d %^NOR%^到%^HIY%^ %d %^NOR%^个英文字母。\n",
+                min_length_id, max_length_id);
+        }
+
         return 0;
     }
 
     return 1;
 }
 
-int check_legal_name(string name)
+int check_legal_name(string name, int is_gmcp)
 {
     int len;
 
     if (!is_chinese(name)) {
-        ansi_write("对不起，请您用%^HIY%^「中文」%^NOR%^取名字。\n");
+        if (!is_gmcp) {
+            ansi_write("对不起，请您用%^HIY%^「中文」%^NOR%^取名字。\n");
+        }
+
         return 0;
     }
 
     len = strlen(name);
 
     if (len < min_length_name || len > max_length_name) {
-        ansi_printf("对不起，你的中文名字必须是%^HIY%^ %d %^NOR%^到%^HIY%^ %d %^NOR%^个汉字。\n",
-            min_length_name, max_length_name);
+        if (!is_gmcp) {
+            ansi_printf("对不起，你的中文名字必须是%^HIY%^ %d %^NOR%^到%^HIY%^ %d %^NOR%^个汉字。\n",
+                min_length_name, max_length_name);
+        }
+
         return 0;
     }
 
