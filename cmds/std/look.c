@@ -403,7 +403,7 @@ string look_all_inventory_of_room(object me, object env, int ret_str)
 int look_item(object me, object obj)
 {
     string str;
-    str = obj->long();
+    str = obj->short();
 
     tell_object(me, str);
     return 1;
@@ -412,7 +412,7 @@ int look_item(object me, object obj)
 int look_living(object me, object obj)
 {
     string str;
-    str = obj->long();
+    str = obj->short();
 
     tell_object(me, str);
     return 1;

@@ -8,14 +8,13 @@
 #define START_ROOM VOID_OB
 #endif
 
-
 inherit IH_NAME;
 
 private void get_uid(string arg, object ob);
 private void get_passwd(string pass, object ob);
 private void check_logon(object ob);
 private void confirm_relogin(string yn, object ob, object user);
-varargs void reconnect(object ob, object user, int silent);
+private varargs void reconnect(object ob, object user, int silent);
 
 private void confirm_id(string yn, object ob);
 private void new_password(string pass, object ob);
@@ -23,7 +22,9 @@ private void confirm_password(string pass, object ob);
 private void get_name(string arg, object ob);
 
 private object init_user(object ob);
-varargs void enter_world(object ob, object user, int silent);
+private varargs void enter_world(object ob, object user, int silent);
+
+void fail(object ob, string err, string msg);
 int check_legal_id(string id);
 int check_legal_name(string name);
 
@@ -31,6 +32,7 @@ int check_legal_name(string name);
 #define max_length_id 16
 #define min_length_name 2
 #define max_length_name 4
+
 
 void create()
 {
@@ -49,6 +51,10 @@ void logon(object ob)
 
 private void get_uid(string arg, object ob)
 {
+    if (ob->is_gmcp()) {
+        return;
+    }
+
     arg = lower_case(arg);
 
     if (!check_legal_id(arg)) {
@@ -81,16 +87,21 @@ private void get_passwd(string pass, object ob)
     my_pass = ob->get_password();
 
     if (!stringp(my_pass) || crypt(pass, my_pass) != my_pass) {
-        ob->add_password_tries();
+        if (ob->is_gmcp()) {
+            fail(ob, "ERR_LOGIN", "登录信息无效，请重试。");
+        } else {
+            ob->add_password_tries();
 
-        if (ob->get_password_tries() < 3) {
-            write("密码错误！请重新输入：");
-            input_to("get_passwd", 1, ob);
-            return;
+            if (ob->get_password_tries() < 3) {
+                write("密码错误！请重新输入：");
+                input_to("get_passwd", 1, ob);
+                return;
+            }
+
+            write("密码错误！\n");
+            destruct(ob);
         }
 
-        write("密码错误！\n");
-        destruct(ob);
         return;
     }
 
@@ -100,6 +111,7 @@ private void get_passwd(string pass, object ob)
 private void check_logon(object ob)
 {
     object user;
+
     // Check if we are already playing.
     user = find_player(ob->get_id());
 
@@ -109,22 +121,27 @@ private void check_logon(object ob)
             return;
         }
 
-        ansi_write("%^WHT%^您要将另一个连线中的相同角色赶出去，取而代之吗？（%^HIY%^y/n%^NOR%^%^WHT%^）%^NOR%^");
-        input_to("confirm_relogin", ob, user);
+        if (ob->is_gmcp()) {
+            confirm_relogin("y", ob, user);
+        } else {
+            ansi_write("%^WHT%^您要将另一个连线中的相同角色赶出去，取而代之吗？（%^HIY%^y/n%^NOR%^%^WHT%^）%^NOR%^");
+            input_to("confirm_relogin", ob, user);
+        }
+
         return;
     }
 
     user = init_user(ob);
 
     if (!objectp(user)) {
-        ansi_write("%^HIR%^无法初始化角色，你可以尝试重新登录或是和巫师联系。%^NOR%^\n");
+        fail(ob, "ERR_LOGIN", "无法初始化角色，你可以尝试重新登录或是和巫师联系。");
         return;
     }
 
     if (!user->restore()) {
         destruct(user);
-        ansi_write("%^HIR%^无法读取你的数据档案，您需要和巫师联系。%^NOR%^\n");
-        destruct(ob);
+        fail(ob, "ERR_LOGIN", "无法读取你的数据档案，您需要和巫师联系。");
+        return;
     }
 
     log_time("login.log", sprintf("%s(%s) login from %s\n",
@@ -150,8 +167,7 @@ private void confirm_relogin(string yn, object ob, object user)
     }
 
     if (!user) {
-        write("在线玩家断开了连接，你需要重新登陆。\n");
-        destruct(ob);
+        fail(ob, "ERR_LOGIN", "在线玩家断开了连接，你需要重新登陆。");
         return;
     }
 
@@ -169,17 +185,27 @@ private void confirm_relogin(string yn, object ob, object user)
         destruct(old_link);
     }
 
-    reconnect(ob, user);
+    reconnect(ob, user, 1);
 }
 
-varargs void reconnect(object ob, object user, int silent)
+private varargs void reconnect(object ob, object user, int new_token)
 {
+    string login_token;
+
+    login_token = ob->generate_token(new_token);
+
+    if (new_token) {
+        ob->save();
+    }
+
     user->set_login_ob(ob);
     ob->set_user_ob(user);
     exec(user, ob);
     user->reconnect();
 
-    if (!silent && environment(user)) {
+    user->login_success(login_token);
+
+    if (environment(user)) {
         tell_room(environment(user), HIW + user->name() + NOR + "重新连线回到这个世界。\n", ({user}));
     }
 }
@@ -238,8 +264,13 @@ private void get_name(string arg, object ob)
     object user;
 
     if (!check_legal_name(arg)) {
-        ansi_write("您的%^HIY%^中文名字%^NOR%^：");
-        input_to("get_name", ob);
+        if (ob->is_gmcp()) {
+            fail(ob, "ERR_REGISTER", sprintf("中文名字必须是 %d 到 %d 个汉字", min_length_name, max_length_name));
+        } else {
+            ansi_write("您的%^HIY%^中文名字%^NOR%^：");
+            input_to("get_name", ob);
+        }
+
         return;
     }
 
@@ -264,8 +295,11 @@ private object init_user(object ob)
     return user;
 }
 
-varargs void enter_world(object ob, object user, int silent)
+private varargs void enter_world(object ob, object user, int silent)
 {
+    string login_token;
+
+    login_token = ob->generate_token();
     user->set_login_ob(ob);
     ob->set_user_ob(user);
 
@@ -278,6 +312,8 @@ varargs void enter_world(object ob, object user, int silent)
     user->add("login_times", 1);
     user->set("last_saved_at", time());
 
+    user->login_success(login_token);
+
     user->setup();
     user->save();
     ob->save();
@@ -286,6 +322,92 @@ varargs void enter_world(object ob, object user, int silent)
 
     user->send_char_info();
     user->move(START_ROOM);
+}
+
+void gmcp_register(object ob, string user_id, string user_passwd, string user_name)
+{
+    user_id = lower_case(user_id);
+
+    if (!check_legal_id(user_id)) {
+        fail(ob, "ERR_REGISTER", sprintf("英文名字必须是 %d 到 %d 个英文字母", min_length_id, max_length_id));
+        return;
+    }
+
+    ob->set_id(user_id);
+
+    if (file_exists(ob->query_save_file() + __SAVE_EXTENSION__)) {
+        fail(ob, "ERR_REGISTER", "英文名字已经存在，请更换一个重试。");
+        return;
+    }
+
+    ob->set_password(crypt(user_passwd, 0));
+
+    get_name(user_name, ob);
+}
+
+void gmcp_logon(object ob, string user_id, string user_passwd)
+{
+    user_id = lower_case(user_id);
+
+    if (!check_legal_id(user_id)) {
+        fail(ob, "ERR_LOGIN", "登录信息有误，请重试。");
+        return;
+    }
+
+    ob->set_id(user_id);
+
+    if (!file_exists(ob->query_save_file() + __SAVE_EXTENSION__)) {
+        fail(ob, "ERR_LOGIN_USER_NOT_FOUND", "查无此人，请先注册或重新登录。");
+        return;
+    }
+
+    if (!ob->restore()) {
+        fail(ob, "ERR_LOGIN", "您的账号存档出了一些问题，请通知巫师处理。");
+        return;
+    }
+
+    get_passwd(user_passwd, ob);
+}
+
+void gmcp_logon_token(object ob, string login_token)
+{
+    string user_id, sub_token;
+
+    if (sscanf(login_token, "%s:%s", user_id, sub_token) != 2) {
+        fail(ob, "ERR_LOGIN", "登录信息有误，请重试。");
+        return;
+    }
+
+    ob->set_id(user_id);
+
+    if (!file_exists(ob->query_save_file() + __SAVE_EXTENSION__)) {
+        fail(ob, "ERR_LOGIN", "登录信息无效，请重试。");
+        return;
+    }
+
+    if (!ob->restore()) {
+        fail(ob, "ERR_LOGIN", "您的账号存档出了一些问题，请通知巫师处理。");
+        return;
+    }
+
+    if (login_token != ob->get_token()) {
+        fail(ob, "ERR_LOGIN", "登录信息无效，请重试。");
+        return;
+    }
+
+    check_logon(ob);
+}
+
+void fail(object ob, string err, string msg)
+{
+    if (ob->is_gmcp()) {
+        ob->login_fail(err, msg);
+        destruct(ob);
+        return;
+    }
+
+    ansi_printf("%^HIR%^%s%^NOR%^\n", msg);
+    destruct(ob);
 }
 
 int check_legal_id(string id)

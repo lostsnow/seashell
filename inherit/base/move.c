@@ -2,7 +2,7 @@
 
 varargs int move(mixed dest, int raw)
 {
-    object me, ob, env;
+    object me, ob;
     me = this_object();
 
     // Find the destination ob for moving.

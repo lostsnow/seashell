@@ -11,9 +11,9 @@ int atoi(string str)
     return v;
 }
 
-public string itoa(int arg)
+string itoa(int arg)
 {
-    return sprintf("%d", arg);;
+    return sprintf("%d", arg);
 }
 
 string itoc(int c)
@@ -21,10 +21,7 @@ string itoc(int c)
     return sprintf("%c", c);
 }
 
-string to_string(mixed arg)
-{
-    return stringp(arg) ? arg : save_variable(arg);
-}
+// to_string: in std/json
 
 // is the string1 be a substring of string2
 int is_sub(string s_str, string m_str)

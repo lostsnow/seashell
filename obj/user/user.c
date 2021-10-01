@@ -1,5 +1,7 @@
 // USER_OB
 
+#include <ansi.h>
+
 inherit IH_CHAR;
 inherit IH_SAVE;
 
@@ -34,6 +36,11 @@ void reconnect()
     tell_object(this_object(), "重新连线完毕。\n");
 }
 
+int is_net_dead()
+{
+    return net_dead || ! interactive(this_object());
+}
+
 // net_dead: called by the gamedriver when an interactive player loses
 // his network connection to the mud.
 void net_dead()
@@ -47,19 +54,22 @@ void net_dead()
 
 void net_dead_clean()
 {
+    object me = this_object();
+
     if (environment()) {
         tell_room(environment(), name() + "断线超过 1 分钟，自动退出这个世界。\n");
     }
 
-    set("last_online", time());
-    set("last_login_ip", query_ip_number(login_ob));
-    set("last_saved_at", time());
-    save();
+    me->set("last_online", time());
+    me->set("last_saved_at", time());
 
     if (objectp(login_ob)) {
+        me->set("last_login_ip", login_ob->get_ip_number());
         destruct(login_ob);
     }
-    destruct(this_object());
+
+    me->save();
+    destruct(me);
 }
 
 string query_save_file()
@@ -88,8 +98,31 @@ object set_login_ob(object ob)
     return login_ob = ob;
 }
 
-void send_char_info() {
-    send_gmcp("char.info", (["id": get_id(), "short": short()]));
+varargs string short(int raw)
+{
+    string str;
+    object me;
+
+    str = ::short(raw);
+    me = this_object();
+
+    if (me->is_net_dead()) {
+        str += HIG + " <断线中>" + NOR;
+    }
+
+    return str;
+}
+
+void send_char_info()
+{
+    object me = this_object();
+    me->send_gmcp("char.info", (["id": get_id(), "short": short()]));
+}
+
+void login_success(string login_token)
+{
+    object me = this_object();
+    me->send_gmcp("login.info", (["code": 0, "token": login_token]));
 }
 
 void send_gmcp(string key, mixed value)
