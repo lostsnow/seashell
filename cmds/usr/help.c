@@ -72,5 +72,5 @@ string help(object me)
 这个命令提供你针对某一主题的详细说明文件，若是不指定主题，
 则提供你有关主题的文件。
 HELP;
-// *INDENT-OFF*
+// *INDENT-ON*
 }

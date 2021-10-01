@@ -35,5 +35,5 @@ string help(object me)
 这个命令会更新系统内部的命令表，如果你新增或删除了某个目录下的指令，
 必须用这个指令更新该目录才能使用。
 HELP;
-// *INDENT-OFF*
+// *INDENT-ON*
 }
