@@ -4,7 +4,7 @@ inherit IH_ROOM;
 
 void create()
 {
-    set_short_name("无尽虚空");
+    set_short_name("虚空之上");
 // *INDENT-OFF*
     set_long_name(@LONG
 这里就是传说中的无尽虚空，你看到四周白茫茫的一片，什么也没有。
@@ -15,7 +15,7 @@ LONG);
 // *INDENT-OFF*
     set_exits(
         ([
-            "up": __DIR__ + "void-up",
+            "down": __DIR__ + "void",
         ])
     );
 // *INDENT-ON*

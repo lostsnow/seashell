@@ -62,10 +62,10 @@ void realtime_map(object me, object env)
 {
     object room_obj;
     mapping exits;
-    int i;
+    int i, pending;
     string map_room, map_room2, arrow;
     string *dirs;
-    string placeholder = "          ";
+    string placeholder = repeat_string(" ", 12);
 
     // *INDENT-OFF*
     mapping alldirs = ([
@@ -139,15 +139,10 @@ void realtime_map(object me, object env)
 
         map_room = map_room2;
 
-        for (i = 0; i < (10 - strlen(map_room2)) / 2; i++) {
-            map_room = map_room + " ";
-            map_room = " " + map_room;
-        }
-
-        printf("             %10s  %-10s  %-10s\n",
+        printf("%22s  %|12s  %-12s\n",
             alldirs["northwest"], map_room, alldirs["northeast"]);
 
-        printf("                        %s   %s   %s\n",
+        printf("%24s%|12s%s\n",
             alldirs["northwest"] == placeholder ? "  " : "＼",
             arrow,
             alldirs["northeast"] == placeholder ? "  " : "／");
@@ -174,21 +169,20 @@ void realtime_map(object me, object env)
             arrow = "--";
         }
 
-        printf("             %10s%s", map_room2, arrow);
-        map_room2 = env->short() ? env->short() : "----------";
+        printf("%22s%s", map_room2, arrow);
+        map_room2 = env->short();
         map_room = HIG + map_room2 + NOR;
 
-        for (i = 0; i < (10 - strlen(map_room2)) / 2; i++) {
-            if (alldirs["east"] == placeholder) {
-                map_room = map_room + " ";
-            } else {
-                map_room = map_room + "-";
-            }
+        pending = (12 - strwidth(map_room)) / 2;
 
-            if (alldirs["west"] == placeholder) {
-                map_room = " " + map_room;
+        if (pending > 0) {
+            if (arrow == "--") {
+                printf(repeat_string("-", pending));
             } else {
-                map_room = "-" + map_room;
+                printf(repeat_string(arrow, pending/2));
+                if (pending%2 == 1) {
+                    printf(" ");
+                }
             }
         }
 
@@ -216,7 +210,18 @@ void realtime_map(object me, object env)
             arrow = "--";
         }
 
-        printf("%s%-10s\n", arrow, map_room2);
+        if (pending > 0) {
+            if (arrow == "--") {
+                printf(repeat_string("-", pending));
+            } else {
+                if (pending%2 == 1) {
+                    printf(" ");
+                }
+                printf(repeat_string(arrow, pending/2));
+            }
+        }
+
+        printf("%s%-12s\n", arrow, map_room2);
 
         arrow = "  ";
         map_room2 = alldirs["out"];
@@ -248,38 +253,16 @@ void realtime_map(object me, object env)
 
         map_room = map_room2;
 
-        for (i = 0; i < (10 - strlen(map_room2)) / 2; i++) {
-            map_room = map_room + " ";
-            map_room = " " + map_room;
-        }
-
-        printf("                        %s   %s   %s\n",
+        printf("%24s%|12s%-12s\n",
             alldirs["southwest"] == placeholder ? "  " : "／",
             arrow,
             alldirs["southeast"] == placeholder ? "  " : "＼");
-        printf("             %10s  %-10s  %-10s\n",
+        printf("%22s  %|12s  %-12s\n",
             alldirs["southwest"], map_room, alldirs["southeast"]);
-
-
     } else {
-        map_room2 = env->short() ? env->short() : "----------";
-        map_room = HIG + map_room2 + NOR;
+        map_room = HIG + env->short() + NOR;
 
-        for (i = 0; i < (10 - strlen(map_room2)) / 2; i++) {
-            if (alldirs["east"] == placeholder) {
-                map_room = map_room + " ";
-            } else {
-                map_room = map_room + "-";
-            }
-
-            if (alldirs["west"] == placeholder) {
-                map_room = " " + map_room;
-            } else {
-                map_room = "-" + map_room;
-            }
-        }
-
-        printf("\n                            %s\n", map_room);
+        printf("%34s", map_room);
     }
 
     return;
