@@ -58,12 +58,12 @@ int main(object me, string arg)
     return result;
 }
 
-void realtime_map(object me, object env)
+string realtime_map(object me, object env)
 {
     object room_obj;
     mapping exits;
     int i, pending;
-    string map_room, map_room2, arrow;
+    string map_room, map_room2, arrow, map_str = "";
     string *dirs;
     string placeholder = repeat_string(" ", 12);
 
@@ -94,178 +94,182 @@ void realtime_map(object me, object env)
     ]);
     // *INDENT-ON*
 
-    if (mapp(exits = env->get_exits())) {
-        dirs = keys(exits);
-
-        for (i = 0; i < sizeof(dirs); i++) {
-            if (!room_obj = find_object(exits[dirs[i]])) {
-                room_obj = load_object(exits[dirs[i]]);
-            }
-
-            if (room_obj) {
-                if (room_obj->short()) {
-                    alldirs[dirs[i]] = room_obj->short();
-                };
-            }
-        }
-
-        arrow = "  ";
-        map_room2 = alldirs["enter"];
-
-        if (alldirs["enter"] != placeholder) {
-            map_room2 = alldirs["enter"];
-            arrow = HIR + "∧" + NOR;
-        }
-
-        if (alldirs["up"] != placeholder) {
-            map_room2 = alldirs["up"];
-            arrow = HIC + "〓" + NOR;
-        }
-
-        if (alldirs["northdown"] != placeholder) {
-            map_room2 = alldirs["northdown"];
-            arrow = "↓";
-        }
-
-        if (alldirs["northup"] != placeholder) {
-            map_room2 = alldirs["northup"];
-            arrow = "↑";
-        }
-
-        if (alldirs["north"] != placeholder) {
-            map_room2 = alldirs["north"];
-            arrow = "｜";
-        }
-
-        map_room = map_room2;
-
-        printf("%22s  %|12s  %-12s\n",
-            alldirs["northwest"], map_room, alldirs["northeast"]);
-
-        printf("%24s%|12s%s\n",
-            alldirs["northwest"] == placeholder ? "  " : "＼",
-            arrow,
-            alldirs["northeast"] == placeholder ? "  " : "／");
-
-        arrow = "  ";
-        map_room2 = alldirs["westdown"];
-
-        if (map_room2 != placeholder) {
-            arrow = "→";
-        }
-
-        if (alldirs["left"] != placeholder) {
-            map_room2 = alldirs["left"];
-            arrow = "〈";
-        }
-
-        if (alldirs["westup"] != placeholder) {
-            map_room2 = alldirs["westup"];
-            arrow = "←";
-        }
-
-        if (alldirs["west"] != placeholder) {
-            map_room2 = alldirs["west"];
-            arrow = "--";
-        }
-
-        printf("%22s%s", map_room2, arrow);
-        map_room2 = env->short();
-        map_room = HIG + map_room2 + NOR;
-
-        pending = (12 - strwidth(map_room)) / 2;
-
-        if (pending > 0) {
-            if (arrow == "--") {
-                printf(repeat_string("-", pending));
-            } else {
-                printf(repeat_string(arrow, pending/2));
-                if (pending%2 == 1) {
-                    printf(" ");
-                }
-            }
-        }
-
-        printf("%s", map_room);
-
-        arrow = "  ";
-        map_room2 = alldirs["eastup"];
-
-        if (map_room2 != placeholder) {
-            arrow = "→";
-        }
-
-        if (alldirs["right"] != placeholder) {
-            map_room2 = alldirs["right"];
-            arrow = "〉";
-        }
-
-        if (alldirs["eastdown"] != placeholder) {
-            map_room2 = alldirs["eastdown"];
-            arrow = "←";
-        }
-
-        if (alldirs["east"] != placeholder) {
-            map_room2 = alldirs["east"];
-            arrow = "--";
-        }
-
-        if (pending > 0) {
-            if (arrow == "--") {
-                printf(repeat_string("-", pending));
-            } else {
-                if (pending%2 == 1) {
-                    printf(" ");
-                }
-                printf(repeat_string(arrow, pending/2));
-            }
-        }
-
-        printf("%s%-12s\n", arrow, map_room2);
-
-        arrow = "  ";
-        map_room2 = alldirs["out"];
-
-        if (alldirs["out"] != placeholder) {
-            map_room2 = alldirs["out"];
-            arrow = HIR + "∨" + NOR;
-        }
-
-        if (alldirs["down"] != placeholder) {
-            map_room2 = alldirs["down"];
-            arrow = HIC + "〓" + NOR;
-        }
-
-        if (alldirs["southdown"] != placeholder) {
-            map_room2 = alldirs["southdown"];
-            arrow = "↑";
-        }
-
-        if (alldirs["southup"] != placeholder) {
-            map_room2 = alldirs["southup"];
-            arrow = "↓";
-        }
-
-        if (alldirs["south"] != placeholder) {
-            map_room2 = alldirs["south"];
-            arrow = "｜";
-        }
-
-        map_room = map_room2;
-
-        printf("%24s%|12s%-12s\n",
-            alldirs["southwest"] == placeholder ? "  " : "／",
-            arrow,
-            alldirs["southeast"] == placeholder ? "  " : "＼");
-        printf("%22s  %|12s  %-12s\n",
-            alldirs["southwest"], map_room, alldirs["southeast"]);
-    } else {
-        map_room = HIG + env->short() + NOR;
-
-        printf("%34s", map_room);
+    if (!mapp(exits = env->get_exits()) || sizeof(exits) ==  0) {
+        return "";
     }
 
-    return;
+    dirs = keys(exits);
+
+    for (i = 0; i < sizeof(dirs); i++) {
+        if (!room_obj = find_object(exits[dirs[i]])) {
+            room_obj = load_object(exits[dirs[i]]);
+        }
+
+        if (room_obj) {
+            if (room_obj->short()) {
+                alldirs[dirs[i]] = room_obj->short();
+            };
+        }
+    }
+
+    arrow = "  ";
+    map_room2 = alldirs["enter"];
+
+    if (alldirs["enter"] != placeholder) {
+        map_room2 = alldirs["enter"];
+        arrow = HIR + "∧" + NOR;
+    }
+
+    if (alldirs["up"] != placeholder) {
+        map_room2 = alldirs["up"];
+        arrow = HIC + "〓" + NOR;
+    }
+
+    if (alldirs["northdown"] != placeholder) {
+        map_room2 = alldirs["northdown"];
+        arrow = "↓";
+    }
+
+    if (alldirs["northup"] != placeholder) {
+        map_room2 = alldirs["northup"];
+        arrow = "↑";
+    }
+
+    if (alldirs["north"] != placeholder) {
+        map_room2 = alldirs["north"];
+        arrow = "｜";
+    }
+
+    map_room = map_room2;
+
+    if (trim(alldirs["northwest"]) != "" || trim(map_room) != "" || trim(alldirs["northeast"]) != "") {
+        map_str += sprintf("%22s  %|12s  %-12s\n",
+                alldirs["northwest"], map_room, alldirs["northeast"]);
+
+        map_str += sprintf("%24s%|12s%s\n",
+                alldirs["northwest"] == placeholder ? "  " : "＼",
+                arrow,
+                alldirs["northeast"] == placeholder ? "  " : "／");
+    }
+
+    arrow = "  ";
+    map_room2 = alldirs["westdown"];
+
+    if (map_room2 != placeholder) {
+        arrow = "→";
+    }
+
+    if (alldirs["left"] != placeholder) {
+        map_room2 = alldirs["left"];
+        arrow = "〈";
+    }
+
+    if (alldirs["westup"] != placeholder) {
+        map_room2 = alldirs["westup"];
+        arrow = "←";
+    }
+
+    if (alldirs["west"] != placeholder) {
+        map_room2 = alldirs["west"];
+        arrow = "--";
+    }
+
+    map_str += sprintf("%22s%s", map_room2, arrow);
+    map_room2 = env->short();
+    map_room = HIG + map_room2 + NOR;
+
+    pending = (12 - strwidth(map_room)) / 2;
+
+    if (pending > 0) {
+        if (arrow == "--") {
+            map_str += sprintf(repeat_string("-", pending));
+        } else {
+            map_str += sprintf(repeat_string(arrow, pending / 2));
+
+            if (pending % 2 == 1) {
+                map_str += sprintf(" ");
+            }
+        }
+    }
+
+    map_str += sprintf("%s", map_room);
+
+    arrow = "  ";
+    map_room2 = alldirs["eastup"];
+
+    if (map_room2 != placeholder) {
+        arrow = "→";
+    }
+
+    if (alldirs["right"] != placeholder) {
+        map_room2 = alldirs["right"];
+        arrow = "〉";
+    }
+
+    if (alldirs["eastdown"] != placeholder) {
+        map_room2 = alldirs["eastdown"];
+        arrow = "←";
+    }
+
+    if (alldirs["east"] != placeholder) {
+        map_room2 = alldirs["east"];
+        arrow = "--";
+    }
+
+    if (pending > 0) {
+        if (arrow == "--") {
+            map_str += sprintf(repeat_string("-", pending));
+        } else {
+            if (pending % 2 == 1) {
+                map_str += sprintf(" ");
+            }
+
+            map_str += sprintf(repeat_string(arrow, pending / 2));
+        }
+    }
+
+    map_str += sprintf("%s%-12s\n", arrow, map_room2);
+
+    arrow = "  ";
+    map_room2 = alldirs["out"];
+
+    if (alldirs["out"] != placeholder) {
+        map_room2 = alldirs["out"];
+        arrow = HIR + "∨" + NOR;
+    }
+
+    if (alldirs["down"] != placeholder) {
+        map_room2 = alldirs["down"];
+        arrow = HIC + "〓" + NOR;
+    }
+
+    if (alldirs["southdown"] != placeholder) {
+        map_room2 = alldirs["southdown"];
+        arrow = "↑";
+    }
+
+    if (alldirs["southup"] != placeholder) {
+        map_room2 = alldirs["southup"];
+        arrow = "↓";
+    }
+
+    if (alldirs["south"] != placeholder) {
+        map_room2 = alldirs["south"];
+        arrow = "｜";
+    }
+
+    map_room = map_room2;
+
+    if (trim(alldirs["southwest"]) != "" || trim(map_room) != "" || trim(alldirs["southeast"]) != "") {
+        map_str += sprintf("%24s%|12s%-12s\n",
+                alldirs["southwest"] == placeholder ? "  " : "／",
+                arrow,
+                alldirs["southeast"] == placeholder ? "  " : "＼");
+        map_str += sprintf("%22s  %|12s  %-12s\n",
+                alldirs["southwest"], map_room, alldirs["southeast"]);
+    }
+
+    return map_str;
 }
 
 int look_room(object me, object env, int brief)
@@ -304,7 +308,7 @@ int look_room(object me, object env, int brief)
     }
 
     if (!brief) {
-        realtime_map(me, env);
+        tell_object(me, realtime_map(me, env));
     }
 
     str += look_all_inventory_of_room(me, env, RETURN_RESULT);
