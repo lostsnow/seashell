@@ -1,4 +1,4 @@
-// IH_MESSAGE
+// K_IH_MESSAGE
 
 #include <property.h>
 

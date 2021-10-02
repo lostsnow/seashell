@@ -1,4 +1,4 @@
-// IH_CLEAN_UP
+// K_IH_CLEAN_UP
 
 #define NEVER_AGAIN         0
 #define TRY_AGAIN_LATER     1

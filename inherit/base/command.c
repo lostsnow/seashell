@@ -1,4 +1,4 @@
-// IH_COMMAND
+// K_IH_COMMAND
 
 #include <property.h>
 #include <name.h>

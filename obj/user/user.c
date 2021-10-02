@@ -4,9 +4,9 @@
 
 inherit IH_CHAR;
 inherit IH_SAVE;
+inherit IH_GMCP;
 
 varargs string short(int raw);
-void send_gmcp(string key, mixed value);
 
 private nosave object login_ob;
 private nosave int net_dead;                    // 标志：是否断开了连接
@@ -124,11 +124,4 @@ void login_success(string login_token)
 {
     object me = this_object();
     me->send_gmcp("login.info", (["code": 0, "token": login_token]));
-}
-
-void send_gmcp(string key, mixed value)
-{
-    if (has_gmcp()) {
-        efun::send_gmcp(key + " " + json_encode(value));
-    }
 }

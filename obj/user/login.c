@@ -4,8 +4,7 @@
 
 inherit IH_SAVE;
 inherit IH_NAME;
-
-void send_gmcp(string key, mixed value);
+inherit IH_GMCP;
 
 private nosave string ip_number;
 private nosave object user_ob;
@@ -130,8 +129,6 @@ void gmcp(string arg)
 {
     string login_token, user_id, user_passwd, user_name;
 
-    debug_message(arg, DEBUG_LEVEL_INFO);
-
     if (sscanf(arg, "/register %s %s %s", user_id, user_passwd, user_name) == 3) {
         is_gmcp_login = 1;
         LOGIN_D->gmcp_register(this_object(), user_id, user_passwd, user_name);
@@ -172,11 +169,4 @@ string generate_token(int renew)
 int is_gmcp()
 {
     return is_gmcp_login;
-}
-
-void send_gmcp(string key, mixed value)
-{
-    if (has_gmcp()) {
-        efun::send_gmcp(key + " " + json_encode(value));
-    }
 }

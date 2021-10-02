@@ -40,6 +40,11 @@
 #define IH_CHAR             K_IH_CHAR
 #endif
 
+#define K_IH_GMCP           KERNEL_DIR "inherit/char/gmcp"
+#ifndef IH_GMCP
+#define IH_GMCP             K_IH_GMCP
+#endif
+
 // message
 #define K_IH_MESSAGE        KERNEL_DIR "inherit/message/message"
 #ifndef IH_MESSAGE

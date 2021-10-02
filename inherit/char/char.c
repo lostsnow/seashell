@@ -1,4 +1,4 @@
-// IH_CHAR
+// K_IH_CHAR
 
 inherit IH_PROPERTY;
 inherit IH_NAME;
