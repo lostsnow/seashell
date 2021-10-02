@@ -1,15 +1,6 @@
 // sefun: string
 
-int atoi(string str)
-{
-    int v;
-
-    if (!stringp(str) || !sscanf(str, "%d", v)) {
-        return 0;
-    }
-
-    return v;
-}
+// efun: to_int
 
 string itoa(int arg)
 {
@@ -21,12 +12,12 @@ string itoc(int c)
     return sprintf("%c", c);
 }
 
-// to_string: in std/json
+// std/json: to_string
 
 // is the string1 be a substring of string2
 int is_sub(string s_str, string m_str)
 {
-    if (! m_str || ! s_str) {
+    if (!m_str || !s_str) {
         return 0;
     }
 
