@@ -51,10 +51,6 @@ void logon(object ob)
 
 private void get_uid(string arg, object ob)
 {
-    if (ob->is_gmcp()) {
-        return;
-    }
-
     arg = lower_case(arg);
 
     if (!check_legal_id(arg, 0)) {
@@ -198,6 +194,8 @@ private varargs void reconnect(object ob, object user, int new_token)
         ob->save();
     }
 
+    // remove input_to for gmcp
+    remove_get_char(ob);
     user->set_login_ob(ob);
     ob->set_user_ob(user);
     exec(user, ob);
@@ -300,6 +298,9 @@ private varargs void enter_world(object ob, object user, int silent)
     string login_token;
 
     login_token = ob->generate_token();
+
+    // remove input_to for gmcp
+    remove_get_char(ob);
     user->set_login_ob(ob);
     ob->set_user_ob(user);
 

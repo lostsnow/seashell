@@ -5,6 +5,7 @@
 inherit IH_CHAR;
 inherit IH_SAVE;
 
+varargs string short(int raw);
 void send_gmcp(string key, mixed value);
 
 private nosave object login_ob;
@@ -38,7 +39,7 @@ void reconnect()
 
 int is_net_dead()
 {
-    return net_dead || ! interactive(this_object());
+    return net_dead || !interactive(this_object());
 }
 
 // net_dead: called by the gamedriver when an interactive player loses
@@ -57,7 +58,7 @@ void net_dead_clean()
     object me = this_object();
 
     if (environment()) {
-        tell_room(environment(), name() + "断线超过 1 分钟，自动退出这个世界。\n");
+        tell_room(environment(), short() + "断线超过 1 分钟，自动退出这个世界。\n");
     }
 
     me->set("last_online", time());
