@@ -38,7 +38,7 @@ void logon_timeout()
     }
 
     if (interactive(me)) {
-        ansi_write("%^HIY%^您花在登录的时间太久了，下次先想好再来吧。\n%^NOR%^");
+        ansi_write("\n%^HIY%^您花在登录的时间太久了，下次先想好再来吧。\n%^NOR%^");
     }
 
     destruct(me);
