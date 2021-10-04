@@ -12,7 +12,10 @@ string itoc(int c)
     return sprintf("%c", c);
 }
 
-// std/json: to_string
+string to_str(mixed arg)
+{
+    return stringp(arg) ? arg : save_variable(arg);
+}
 
 // is the string1 be a substring of string2
 int is_sub(string s_str, string m_str)

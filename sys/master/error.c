@@ -62,6 +62,10 @@ string error_handler(mapping error, int caught)
 {
     string trace, full_trace;
 
+    if (caught) {
+        return "";
+    }
+
     trace = standard_trace(error, caught);
 
     if (this_player(1)) {

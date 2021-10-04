@@ -334,6 +334,11 @@ void gmcp_register(object ob, string user_id, string user_passwd, string user_na
         return;
     }
 
+    if (strlen(user_passwd) < 5) {
+        fail(ob, "ERR_REGISTER", "密码的长度至少要五个字符，请重设您的密码。");
+        return;
+    }
+
     ob->set_id(user_id);
 
     if (file_exists(ob->query_save_file() + __SAVE_EXTENSION__)) {
@@ -348,6 +353,11 @@ void gmcp_register(object ob, string user_id, string user_passwd, string user_na
 
 void gmcp_logon(object ob, string user_id, string user_passwd)
 {
+    if (!user_id || !user_passwd) {
+        fail(ob, "ERR_LOGIN", "登录信息无效，请重试。");
+        return;
+    }
+
     user_id = lower_case(user_id);
 
     if (!check_legal_id(user_id, 1)) {
@@ -370,12 +380,10 @@ void gmcp_logon(object ob, string user_id, string user_passwd)
     get_passwd(user_passwd, ob);
 }
 
-void gmcp_logon_token(object ob, string login_token)
+void gmcp_logon_token(object ob, string user_id, string login_token)
 {
-    string user_id, sub_token;
-
-    if (sscanf(login_token, "%s:%s", user_id, sub_token) != 2) {
-        fail(ob, "ERR_LOGIN", "登录信息有误，请重试。");
+    if (!user_id || !login_token) {
+        fail(ob, "ERR_LOGIN", "登录信息无效，请重试。");
         return;
     }
 

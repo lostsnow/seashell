@@ -21,6 +21,7 @@ void logon()
     ip_number = query_ip_number(me);
     remove_call_out("logon_timeout");
     call_out("logon_timeout", LOGIN_TIMEOUT);
+    init_gmcp();
 
     LOGIN_D->logon(me);
 }
@@ -119,31 +120,46 @@ void add_password_tries()
     password_tries++;
 }
 
-void login_fail(string err, string msg)
-{
-    object me = this_object();
-    me->send_gmcp("login.info", (["code": -1, "error": err, "message": msg]));
-}
-
 void gmcp(string arg)
 {
-    string login_token, user_id, user_passwd, user_name;
+    string pl;
+    mapping payload;
+    mixed err;
+    object me = this_object();
 
-    if (sscanf(arg, "/register %s %s %s", user_id, user_passwd, user_name) == 3) {
-        is_gmcp_login = 1;
-        LOGIN_D->gmcp_register(this_object(), user_id, user_passwd, user_name);
+    if (sscanf(arg, "Char.Register %s", pl) == 1) {
+        err = catch (payload = json_decode(pl));
+
+        if (!err) {
+            if (payload["id"] && payload["password"] && payload["name"]) {
+                is_gmcp_login = 1;
+                LOGIN_D->gmcp_register(me, to_str(payload["id"]), to_str(payload["password"]), to_str(payload["name"]));
+                return;
+            }
+        }
+
+        login_fail("ERR_REGISTER", "注册参数无效");
         return;
     }
 
-    if (sscanf(arg, "/login %s %s", user_id, user_passwd) == 2) {
-        is_gmcp_login = 1;
-        LOGIN_D->gmcp_logon(this_object(), user_id, user_passwd);
-        return;
-    }
+    if (sscanf(arg, "Char.Login %s", pl) == 1) {
+        err = catch (payload = json_decode(pl));
 
-    if (sscanf(arg, "/login %s", login_token) == 1) {
-        is_gmcp_login = 1;
-        LOGIN_D->gmcp_logon_token(this_object(), login_token);
+        if (!err) {
+            if (payload["id"] && payload["token"]) {
+                is_gmcp_login = 1;
+                LOGIN_D->gmcp_logon_token(me, to_str(payload["id"]), to_str(payload["token"]));
+                return;
+            }
+
+            if (payload["id"] && payload["password"]) {
+                is_gmcp_login = 1;
+                LOGIN_D->gmcp_logon(me, to_str(payload["id"]), to_str(payload["password"]));
+                return;
+            }
+        }
+
+        login_fail("ERR_LOGIN", "登录参数无效");
         return;
     }
 }
@@ -156,10 +172,8 @@ string get_token()
 // @TODO: delete token when cmd quit
 string generate_token(int renew)
 {
-    object me = this_object();
-
     if (renew || !token) {
-        token = me->get_id() + ":" + random_string(128);
+        token = random_string(128);
         token_create_at = time();
     }
 

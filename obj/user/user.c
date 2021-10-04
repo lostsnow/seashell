@@ -113,15 +113,3 @@ varargs string short(int raw)
 
     return str;
 }
-
-void send_char_info()
-{
-    object me = this_object();
-    me->send_gmcp("char.info", (["id": get_id(), "short": short()]));
-}
-
-void login_success(string login_token)
-{
-    object me = this_object();
-    me->send_gmcp("login.info", (["code": 0, "token": login_token]));
-}
