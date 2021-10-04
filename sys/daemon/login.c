@@ -354,26 +354,26 @@ void gmcp_register(object ob, string user_id, string user_passwd, string user_na
 void gmcp_logon(object ob, string user_id, string user_passwd)
 {
     if (!user_id || !user_passwd) {
-        fail(ob, "ERR_LOGIN", "登录信息无效，请重试。");
+        fail(ob, "ERR_LOGIN_PASS", "登录信息无效，请重试。");
         return;
     }
 
     user_id = lower_case(user_id);
 
     if (!check_legal_id(user_id, 1)) {
-        fail(ob, "ERR_LOGIN", "登录信息有误，请重试。");
+        fail(ob, "ERR_LOGIN_PASS", "登录信息有误，请重试。");
         return;
     }
 
     ob->set_id(user_id);
 
     if (!file_exists(ob->query_save_file() + __SAVE_EXTENSION__)) {
-        fail(ob, "ERR_LOGIN_USER_NOT_FOUND", "查无此人，请先注册或重新登录。");
+        fail(ob, "ERR_LOGIN_PASS", "查无此人，请先注册或重新登录。");
         return;
     }
 
     if (!ob->restore()) {
-        fail(ob, "ERR_LOGIN", "您的账号存档出了一些问题，请通知巫师处理。");
+        fail(ob, "ERR_LOGIN_PASS", "您的账号存档出了一些问题，请通知巫师处理。");
         return;
     }
 
@@ -383,24 +383,24 @@ void gmcp_logon(object ob, string user_id, string user_passwd)
 void gmcp_logon_token(object ob, string user_id, string login_token)
 {
     if (!user_id || !login_token) {
-        fail(ob, "ERR_LOGIN", "登录信息无效，请重试。");
+        fail(ob, "ERR_LOGIN_TOKEN", "登录信息无效，请重试。");
         return;
     }
 
     ob->set_id(user_id);
 
     if (!file_exists(ob->query_save_file() + __SAVE_EXTENSION__)) {
-        fail(ob, "ERR_LOGIN", "登录信息无效，请重试。");
+        fail(ob, "ERR_LOGIN_TOKEN", "登录信息无效，请重试。");
         return;
     }
 
     if (!ob->restore()) {
-        fail(ob, "ERR_LOGIN", "您的账号存档出了一些问题，请通知巫师处理。");
+        fail(ob, "ERR_LOGIN_TOKEN", "您的账号存档出了一些问题，请通知巫师处理。");
         return;
     }
 
     if (login_token != ob->get_token()) {
-        fail(ob, "ERR_LOGIN", "登录信息无效，请重试。");
+        fail(ob, "ERR_LOGIN_TOKEN", "登录信息无效，请重试。");
         return;
     }
 

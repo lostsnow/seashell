@@ -22,5 +22,6 @@
 #define CFG_PTOTOCOL_GMCP()         ((int) get_config(__RC_ENABLE_GMCP__))
 
 #define CFG_PORT_CHARSET(port)      (CONFIG_D->query_string("charset " + (port)))
+#define CFG_GMCP_SECRET()           (CONFIG_D->query_string("gmcp secret"))
 
 #endif // __CONFIG_H__

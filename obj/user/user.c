@@ -113,3 +113,8 @@ varargs string short(int raw)
 
     return str;
 }
+
+void gmcp(string arg)
+{
+    ::gmcp(arg);
+}
