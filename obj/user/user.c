@@ -34,7 +34,7 @@ void reconnect()
     set_heart_beat(1);
     net_dead = 0;
     remove_call_out("net_dead_clean");
-    tell_object(this_object(), "重新连线完毕。\n");
+    tell_object(this_object(), "\n重新连线完毕。\n");
 }
 
 int is_net_dead()
@@ -48,7 +48,7 @@ void net_dead()
 {
     set_heart_beat(0);
     call_out("net_dead_clean", 60);
-    say(name() + "断线了。\n");
+    say(short(1) + "断线了。\n");
 
     net_dead = 1;
 }
@@ -58,7 +58,7 @@ void net_dead_clean()
     object me = this_object();
 
     if (environment()) {
-        tell_room(environment(), short() + "断线超过 1 分钟，自动退出这个世界。\n");
+        tell_room(environment(), short(1) + "断线超过 1 分钟，自动退出这个世界。\n");
     }
 
     me->set("last_online", time());
@@ -106,6 +106,10 @@ varargs string short(int raw)
 
     str = ::short(raw);
     me = this_object();
+
+    if (raw) {
+        return str;
+    }
 
     if (me->is_net_dead()) {
         str += HIG + " <断线中>" + NOR;

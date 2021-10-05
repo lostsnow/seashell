@@ -140,8 +140,8 @@ private void check_logon(object ob)
         return;
     }
 
-    log_time("login.log", sprintf("%s(%s) login from %s\n",
-            user->name(), user->get_id(), query_ip_number(ob)));
+    log_time("login.log", sprintf("%s login from %s\n",
+            user->short(1), query_ip_number(ob)));
 
     enter_world(ob, user);
 }
@@ -168,8 +168,8 @@ private void confirm_relogin(string yn, object ob, object user)
     }
 
     tell_object(user, "有人从别处（" + query_ip_number(ob) + "）连线取代你所控制的角色。\n");
-    log_time("login.log", sprintf("%s(%s) relogin from %s\n",
-            user->name(), user->get_id(), query_ip_number(ob)));
+    log_time("login.log", sprintf("%s relogin from %s\n",
+            user->short(1), query_ip_number(ob)));
     // Kick out tho old player.
     old_link = user->get_login_ob();
 
@@ -204,7 +204,7 @@ private varargs void reconnect(object ob, object user, int new_token)
     user->login_success(login_token);
 
     if (environment(user)) {
-        tell_room(environment(user), HIW + user->name() + NOR + "重新连线回到这个世界。\n", ({user}));
+        tell_room(environment(user), HIW + user->short(1) + NOR + "重新连线回到这个世界。\n", ({user}));
     }
 }
 
@@ -319,7 +319,7 @@ private varargs void enter_world(object ob, object user, int silent)
     user->save();
     ob->save();
 
-    write("你连线进入" + LOCAL_MUD_NAME() + "。\n\n");
+    write("\n你连线进入" + LOCAL_MUD_NAME() + "。\n\n");
 
     user->send_char_info();
     user->move(START_ROOM);
