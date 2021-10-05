@@ -152,6 +152,7 @@ void gmcp(string arg)
         payload = gmcp_payload(pl);
 
         if (!payload) {
+
             login_fail("ERR_LOGIN", "登录参数无效");
             return;
         }

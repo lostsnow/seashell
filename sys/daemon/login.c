@@ -28,6 +28,8 @@ void fail(object ob, string err, string msg);
 int check_legal_id(string id, int is_gmcp);
 int check_legal_name(string name, int is_gmcp);
 
+private nosave int login_by_token;
+
 #define min_length_id 3
 #define max_length_id 16
 #define min_length_name 2
@@ -84,7 +86,7 @@ private void get_passwd(string pass, object ob)
 
     if (!stringp(my_pass) || crypt(pass, my_pass) != my_pass) {
         if (ob->is_gmcp()) {
-            fail(ob, "ERR_LOGIN", "登录信息无效，请重试。");
+            fail(ob, "ERR_LOGIN_PASS", "登录信息无效，请重试。");
         } else {
             ob->add_password_tries();
 
@@ -107,6 +109,13 @@ private void get_passwd(string pass, object ob)
 private void check_logon(object ob)
 {
     object user;
+    string err;
+
+    if (login_by_token) {
+        err = "EERR_LOGIN_TOKEN";
+    } else {
+        err = "EERR_LOGIN_PASS";
+    }
 
     // Check if we are already playing.
     user = find_player(ob->get_id());
@@ -130,13 +139,13 @@ private void check_logon(object ob)
     user = init_user(ob);
 
     if (!objectp(user)) {
-        fail(ob, "ERR_LOGIN", "无法初始化角色，你可以尝试重新登录或是和巫师联系。");
+        fail(ob, err, "无法初始化角色，你可以尝试重新登录或是和巫师联系。");
         return;
     }
 
     if (!user->restore()) {
         destruct(user);
-        fail(ob, "ERR_LOGIN", "无法读取你的数据档案，您需要和巫师联系。");
+        fail(ob, err, "无法读取你的数据档案，您需要和巫师联系。");
         return;
     }
 
@@ -149,6 +158,7 @@ private void check_logon(object ob)
 private void confirm_relogin(string yn, object ob, object user)
 {
     object old_link;
+    string err;
 
     if (!yn || yn == "") {
         ansi_write("%^WHT%^您要将另一个连线中的相同角色赶出去，取而代之吗？（%^NOR%^%^HIY%^y/n%^NOR%^%^WHT%^%^NOR%^）");
@@ -162,8 +172,14 @@ private void confirm_relogin(string yn, object ob, object user)
         return;
     }
 
+    if (login_by_token) {
+        err = "EERR_LOGIN_TOKEN";
+    } else {
+        err = "EERR_LOGIN_PASS";
+    }
+
     if (!user) {
-        fail(ob, "ERR_LOGIN", "在线玩家断开了连接，你需要重新登陆。");
+        fail(ob, err, "在线玩家断开了连接，你需要重新登陆。");
         return;
     }
 
@@ -358,6 +374,7 @@ void gmcp_logon(object ob, string user_id, string user_passwd)
         return;
     }
 
+    login_by_token = 0;
     user_id = lower_case(user_id);
 
     if (!check_legal_id(user_id, 1)) {
@@ -387,6 +404,7 @@ void gmcp_logon_token(object ob, string user_id, string login_token)
         return;
     }
 
+    login_by_token = 1;
     ob->set_id(user_id);
 
     if (!file_exists(ob->query_save_file() + __SAVE_EXTENSION__)) {
