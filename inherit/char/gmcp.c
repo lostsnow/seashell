@@ -22,7 +22,6 @@ void init_gmcp()
         return;
     }
 
-    send_gmcp("Core.Info", MSSP_D->mssp_telopt());
     send_gmcp("Char.Login", ([]));
     send_gmcp("Char.Info", ([]));
     inited = 1;
