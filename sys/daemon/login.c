@@ -141,7 +141,7 @@ private void check_logon(object ob)
     }
 
     log_time("login.log", sprintf("%s login from %s\n",
-            user->short(1), query_ip_number(ob)));
+            user->short(1), ob->get_ip_number()));
 
     enter_world(ob, user);
 }
@@ -167,9 +167,9 @@ private void confirm_relogin(string yn, object ob, object user)
         return;
     }
 
-    tell_object(user, "有人从别处（" + query_ip_number(ob) + "）连线取代你所控制的角色。\n");
+    tell_object(user, "有人从别处（" + ob->get_ip_number() + "）连线取代你所控制的角色。\n");
     log_time("login.log", sprintf("%s relogin from %s\n",
-            user->short(1), query_ip_number(ob)));
+            user->short(1), ob->get_ip_number()));
     // Kick out tho old player.
     old_link = user->get_login_ob();
 
@@ -276,7 +276,7 @@ private void get_name(string arg, object ob)
     user->set_name(arg);
 
     log_time("register.log", sprintf("%s was created from %s\n",
-            user->get_id(), query_ip_number(ob)));
+            user->get_id(), ob->get_ip_number()));
 
     enter_world(ob, user);
 }
