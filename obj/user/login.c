@@ -175,7 +175,13 @@ string get_token()
     return token;
 }
 
-// @TODO: delete token when cmd quit
+void clean_token()
+{
+    token = 0;
+    token_create_at = 0;
+    save();
+}
+
 string generate_token(int renew)
 {
     if (renew || !token) {
