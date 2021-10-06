@@ -446,7 +446,7 @@ int check_legal_id(string id, int is_gmcp)
     while (i--) {
         if (id[i] < 'a' || id[i] > 'z') {
             if (!is_gmcp) {
-                ansi_write("对不起，你的英文名字只能用%^HIY%^英文字母%^NOR%^。\n");
+                ansi_write("你的英文名字只能用%^HIY%^英文字母%^NOR%^。\n");
             }
 
             return 0;
@@ -455,7 +455,7 @@ int check_legal_id(string id, int is_gmcp)
 
     if (len < min_length_id || len > max_length_id) {
         if (!is_gmcp) {
-            ansi_printf("对不起，你的英文名字必须是%^HIY%^ %d %^NOR%^到%^HIY%^ %d %^NOR%^个英文字母。\n",
+            ansi_printf("你的英文名字必须是%^HIY%^ %d %^NOR%^到%^HIY%^ %d %^NOR%^个英文字母。\n",
                 min_length_id, max_length_id);
         }
 
@@ -471,7 +471,7 @@ int check_legal_name(string name, int is_gmcp)
 
     if (!is_chinese(name)) {
         if (!is_gmcp) {
-            ansi_write("对不起，请您用%^HIY%^「中文」%^NOR%^取名字。\n");
+            ansi_write("请您用%^HIY%^「中文」%^NOR%^取名字。\n");
         }
 
         return 0;
@@ -481,7 +481,7 @@ int check_legal_name(string name, int is_gmcp)
 
     if (len < min_length_name || len > max_length_name) {
         if (!is_gmcp) {
-            ansi_printf("对不起，你的中文名字必须是%^HIY%^ %d %^NOR%^到%^HIY%^ %d %^NOR%^个汉字。\n",
+            ansi_printf("你的中文名字必须是%^HIY%^ %d %^NOR%^到%^HIY%^ %d %^NOR%^个汉字。\n",
                 min_length_name, max_length_name);
         }
 

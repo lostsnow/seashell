@@ -1,6 +1,6 @@
 // K_IH_MESSAGE
 
-#include <property.h>
+#include <inherit/property.h>
 
 void receive_message(string type, string msg)
 {

@@ -2,7 +2,17 @@
 
 #include <config.h>
 
+varargs mixed gmcp_payload(string pl, int verify);
+int is_gmcp();
+string get_ip_number();
+void login_success(string login_token);
+void login_fail(string err, string msg);
+
 protected nosave int inited;
+protected nosave string ip_number;
+protected string token;
+protected int token_create_at;
+protected nosave int is_gmcp_login;
 
 varargs void send_gmcp(string key, mixed value)
 {
@@ -54,6 +64,92 @@ void gmcp(string arg)
     if (arg == "Core.Ping") {
         efun::send_gmcp(arg);
     }
+}
+
+void login_gmcp(string arg)
+{
+    string pl;
+    mapping payload;
+    object me = this_object();
+
+    if (sscanf(arg, "Core.Hello %s", pl) == 1) {
+        payload = gmcp_payload(pl, 1);
+
+        if (payload && payload["verified"] && payload["ip"]) {
+            ip_number = payload["ip"];
+        }
+
+        return;
+    }
+
+    if (sscanf(arg, "Char.Register %s", pl) == 1) {
+        payload = gmcp_payload(pl);
+
+        if (!payload) {
+            login_fail("ERR_REGISTER", "注册参数无效");
+            return;
+        }
+
+        if (payload["id"] && payload["password"] && payload["name"]) {
+            is_gmcp_login = 1;
+            LOGIN_D->gmcp_register(me, to_str(payload["id"]), to_str(payload["password"]), to_str(payload["name"]));
+            return;
+        }
+    }
+
+    if (sscanf(arg, "Char.Login %s", pl) == 1) {
+        payload = gmcp_payload(pl);
+
+        if (!payload) {
+
+            login_fail("ERR_LOGIN", "登录参数无效");
+            return;
+        }
+
+        if (payload["id"] && payload["token"]) {
+            is_gmcp_login = 1;
+            LOGIN_D->gmcp_logon_token(me, to_str(payload["id"]), to_str(payload["token"]));
+            return;
+        }
+
+        if (payload["id"] && payload["password"]) {
+            is_gmcp_login = 1;
+            LOGIN_D->gmcp_logon(me, to_str(payload["id"]), to_str(payload["password"]));
+            return;
+        }
+    }
+}
+
+
+string get_token()
+{
+    return token;
+}
+
+void clean_token()
+{
+    token = 0;
+    token_create_at = 0;
+}
+
+string generate_token(int renew)
+{
+    if (renew || !token) {
+        token = random_string(128);
+        token_create_at = time();
+    }
+
+    return token;
+}
+
+int is_gmcp()
+{
+    return is_gmcp_login;
+}
+
+string get_ip_number()
+{
+    return ip_number;
 }
 
 void send_char_info()

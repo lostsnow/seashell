@@ -14,6 +14,7 @@ int main(object me, string arg)
     if (objectp(login_ob)) {
         me->set("last_login_ip", login_ob->get_ip_number());
         login_ob->clean_token();
+        login_ob->save();
         destruct(login_ob);
     }
 

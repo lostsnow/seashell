@@ -1,7 +1,7 @@
 // K_IH_MORE
 
 #include <ansi.h>
-#include <property.h>
+#include <inherit/property.h>
 
 #define LINES_PER_PAGE 40
 

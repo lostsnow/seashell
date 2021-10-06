@@ -1,7 +1,7 @@
 // K_IH_COMMAND
 
-#include <property.h>
-#include <name.h>
+#include <inherit/property.h>
+#include <inherit/name.h>
 #include <command.h>
 
 string *query_path();

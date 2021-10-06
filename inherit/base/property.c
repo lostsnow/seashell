@@ -1,6 +1,6 @@
 // K_IH_PROPERTY
 
-#include <property.h>
+#include <inherit/property.h>
 
 mapping properties = ([]);
 nosave mapping temp_properties = ([]);

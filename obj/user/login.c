@@ -6,14 +6,10 @@ inherit IH_SAVE;
 inherit IH_NAME;
 inherit IH_GMCP;
 
-private nosave string ip_number;
 private nosave object user_ob;
 private string password;
 private nosave string temp_password;
 nosave int password_tries = 0;
-private string token;
-private int token_create_at;
-private nosave int is_gmcp_login;
 
 void logon()
 {
@@ -117,88 +113,6 @@ void add_password_tries()
 
 void gmcp(string arg)
 {
-    string pl;
-    mapping payload;
-    object me = this_object();
-
     ::gmcp(arg);
-
-    if (sscanf(arg, "Core.Hello %s", pl) == 1) {
-        payload = gmcp_payload(pl, 1);
-
-        if (payload && payload["verified"] && payload["ip"]) {
-            ip_number = payload["ip"];
-        }
-
-        return;
-    }
-
-    if (sscanf(arg, "Char.Register %s", pl) == 1) {
-        payload = gmcp_payload(pl);
-
-        if (!payload) {
-            login_fail("ERR_REGISTER", "注册参数无效");
-            return;
-        }
-
-        if (payload["id"] && payload["password"] && payload["name"]) {
-            is_gmcp_login = 1;
-            LOGIN_D->gmcp_register(me, to_str(payload["id"]), to_str(payload["password"]), to_str(payload["name"]));
-            return;
-        }
-    }
-
-    if (sscanf(arg, "Char.Login %s", pl) == 1) {
-        payload = gmcp_payload(pl);
-
-        if (!payload) {
-
-            login_fail("ERR_LOGIN", "登录参数无效");
-            return;
-        }
-
-        if (payload["id"] && payload["token"]) {
-            is_gmcp_login = 1;
-            LOGIN_D->gmcp_logon_token(me, to_str(payload["id"]), to_str(payload["token"]));
-            return;
-        }
-
-        if (payload["id"] && payload["password"]) {
-            is_gmcp_login = 1;
-            LOGIN_D->gmcp_logon(me, to_str(payload["id"]), to_str(payload["password"]));
-            return;
-        }
-    }
-}
-
-string get_token()
-{
-    return token;
-}
-
-void clean_token()
-{
-    token = 0;
-    token_create_at = 0;
-    save();
-}
-
-string generate_token(int renew)
-{
-    if (renew || !token) {
-        token = random_string(128);
-        token_create_at = time();
-    }
-
-    return token;
-}
-
-int is_gmcp()
-{
-    return is_gmcp_login;
-}
-
-string get_ip_number()
-{
-    return ip_number;
+    login_gmcp(arg);
 }
