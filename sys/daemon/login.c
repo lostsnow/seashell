@@ -324,10 +324,8 @@ private varargs void enter_world(object ob, object user, int silent)
         exec(user, ob);
     }
 
-    user->set_temp("login_at", time());
     user->set("last_login_at", time());
     user->add("login_times", 1);
-    user->set("last_saved_at", time());
 
     user->login_success(login_token);
 

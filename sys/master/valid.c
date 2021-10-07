@@ -35,3 +35,18 @@ int valid_override(string file, string efun_name, string main_file)
     //  may also wish to protect shutdown, snoop, and exec.
     return 1;
 }
+
+// valid_write: write privileges; called with the file name, the object
+//   initiating the call, and the function by which they called it.
+int valid_write(string file, mixed user, string func)
+{
+    // debug_message(sprintf("[%O]->valid_write(): %s(%s)", user, file, func), DEBUG_LEVEL_TRACE);
+    return 1;
+}
+
+// valid_read: read privileges; called exactly the same as valid_write()
+int valid_read(string file, mixed user, string func)
+{
+    // debug_message(sprintf("[%O]->valid_read(): %s(%s)", user, file, func), DEBUG_LEVEL_TRACE);
+    return 1;
+}

@@ -8,9 +8,6 @@ int main(object me, string arg)
 
     login_ob = me->get_login_ob();
 
-    me->set("last_online", time());
-    me->set("last_saved_at", time());
-
     if (objectp(login_ob)) {
         me->set("last_login_ip", login_ob->get_ip_number());
         login_ob->clean_token();

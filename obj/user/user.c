@@ -7,25 +7,26 @@ inherit IH_SAVE;
 inherit IH_GMCP;
 
 varargs string short(int raw);
+int save();
 
 private nosave object login_ob;
 private nosave int net_dead;                    // 标志：是否断开了连接
 
-void create()
+int is_player()
 {
-    seteuid(0);
+    return clonep();
 }
 
 void setup()
 {
-    seteuid(getuid(this_object()));
-    set_heart_beat(1);
-    enable_player_commands();
+    ::setup();
 }
 
-int is_player()
+int save()
 {
-    return clonep();
+    set("last_online", time());
+    set("last_save_at", time());
+    return ::save();
 }
 
 // reconnect: called by the LOGIN_D when a netdead player reconnects.
@@ -61,9 +62,6 @@ void net_dead_clean()
         tell_room(environment(), short(1) + "断线超过 1 分钟，自动退出这个世界。\n");
     }
 
-    me->set("last_online", time());
-    me->set("last_saved_at", time());
-
     if (objectp(login_ob)) {
         me->set("last_login_ip", login_ob->get_ip_number());
         destruct(login_ob);
@@ -97,25 +95,6 @@ object get_login_ob()
 object set_login_ob(object ob)
 {
     return login_ob = ob;
-}
-
-varargs string short(int raw)
-{
-    string str;
-    object me;
-
-    str = ::short(raw);
-    me = this_object();
-
-    if (raw) {
-        return str;
-    }
-
-    if (me->is_net_dead()) {
-        str += HIG + " <断线中>" + NOR;
-    }
-
-    return str;
 }
 
 void gmcp(string arg)
