@@ -1,7 +1,7 @@
 // COMMAND_D
 
 #include <ansi.h>
-#include <command.h>
+#include <inherit/command.h>
 
 inherit IH_NAME;
 

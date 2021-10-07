@@ -2,7 +2,7 @@
 
 #include <inherit/property.h>
 #include <inherit/name.h>
-#include <command.h>
+#include <inherit/command.h>
 
 string *query_path();
 
