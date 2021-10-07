@@ -94,7 +94,7 @@ string realtime_map(object me, object env)
     ]);
     // *INDENT-ON*
 
-    if (!mapp(exits = env->get_exits()) || sizeof(exits) ==  0) {
+    if (!mapp(exits = env->query_exits()) || sizeof(exits) ==  0) {
         return "";
     }
 
@@ -291,7 +291,7 @@ int look_room(object me, object env, int brief)
                 env->short(), " - " + HIK + file_name(env) + NOR);
     }
 
-    if (mapp(exits = env->get_exits())) {
+    if (mapp(exits = env->query_exits())) {
         dirs = keys(exits);
 
         // @TODO: closed door
@@ -424,7 +424,7 @@ int look_room_item(object me, string arg)
         return 1;
     }
 
-    if (mapp(exits = env->get_exits()) && !undefinedp(exits[arg])) {
+    if (mapp(exits = env->query_exits()) && !undefinedp(exits[arg])) {
         if (objectp(env = find_object(exits[arg]))) {
             look_room(me, env, 0);
         } else {
