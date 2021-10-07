@@ -39,7 +39,7 @@ int main(object me, string arg)
         }
 
         if (!ob = present(arg, ob1)) {
-            return notify_fail("该生物身上无此物件: " + arg + "\n");
+            return notify_fail("该生物身上无此对象: " + arg + "\n");
         }
     } else if (arg == "here") {
         ob = environment(me);
@@ -95,26 +95,34 @@ int main(object me, string arg)
     }
 
     if (!mapp(p_vars) && !mapp(t_vars) && !mapp(list) && !mapp(tlist)) {
-        return  notify_fail("Data: 此对象并没有储存任何的资料。\n");
+        return  notify_fail("Data: 此对象并没有储存任何的数据。\n");
     }
 
     text = "Object: " + base_name(ob) + ".c\n\n";
 
-    text += "%^HIY%^VARIABLE:%^NOR%^\n";
-    text += normalize_map(p_vars);
-    text += "\n%^HIY%^总共有 " + sizeof(p_vars) + " 个储存的变量。%^NOR%^\n\n";
+    if (!spec || spec == "-d") {
+        text += "%^HIY%^VARIABLE:%^NOR%^\n";
+        text += normalize_map(p_vars);
+        text += "\n%^HIY%^总共有 " + sizeof(p_vars) + " 个储存的变量。%^NOR%^\n\n";
+    }
 
-    text += "%^HIY%^TEMP VARIABLE:%^NOR%^\n";
-    text += normalize_map(t_vars);
-    text += "\n%^HIY%^总共有 " + sizeof(t_vars) + " 个暂存的变量。%^NOR%^\n\n";
+    if (!spec || spec == "-t") {
+        text += "%^HIY%^TEMP VARIABLE:%^NOR%^\n";
+        text += normalize_map(t_vars);
+        text += "\n%^HIY%^总共有 " + sizeof(t_vars) + " 个暂存的变量。%^NOR%^\n\n";
+    }
 
-    text += "%^HIY%^PROPERTY:%^NOR%^\n";
-    text += normalize_map(list);
-    text += "\n%^HIY%^总共有 " + sizeof(list) + " 个储存的属性。%^NOR%^\n\n";
+    if (!spec || spec == "-d") {
+        text += "%^HIY%^PROPERTY:%^NOR%^\n";
+        text += normalize_map(list);
+        text += "\n%^HIY%^总共有 " + sizeof(list) + " 个储存的属性。%^NOR%^\n\n";
+    }
 
-    text += "%^HIY%^TEMP PROPERTY:%^NOR%^\n";
-    text += normalize_map(tlist);
-    text += "\n%^HIY%^总共有 " + sizeof(tlist) + " 个暂存的属性。%^NOR%^\n\n";
+    if (!spec || spec == "-t") {
+        text += "%^HIY%^TEMP PROPERTY:%^NOR%^\n";
+        text += normalize_map(tlist);
+        text += "\n%^HIY%^总共有 " + sizeof(tlist) + " 个暂存的属性。%^NOR%^\n\n";
+    }
 
     me->start_more(ansi_sprintf(text));
     return 1;
@@ -145,22 +153,22 @@ string help(object  me)
 {
 // *INDENT-OFF*
     return @LONG
-指令格式: data <-t|-d> <玩家|物件|here> <in 玩家或生物>
+命令格式: data <-t|-d> <玩家|物件|here> <in 玩家或生物>
 
-指令范例:
-    data                  <--  看自己的所有  data  base
-    data -t               <--  看自己的暂存资料
-    data -d               <--  看自己的永久资料
-    data -t here          <--  看所在房间的暂时资料
-    data wade             <--  看 wade 这个玩家(或物件)的所有资料
+命令范例:
+    data                  <--  看自己的所有数据
+    data -t               <--  看自己的暂存数据
+    data -d               <--  看自己的永久数据
+    data -t here          <--  看所在房间的暂存数据
+    data wade             <--  看 wade 这个玩家(或物件)的所有数据
     data board            <--  看版子的资料
-    data cloth in wade    <--  看 wade 身上的 cloth 的资料
+    data cloth in wade    <--  看 wade 身上的 cloth 的数据
 
-指令说明:
-    此命令让你可以观看所指定物件的资料，且将会以 more 的
-方式输出，如果没有指定数，则自动以使用者为参数。其中的 -t 选
-项可以显示暂时变数, -d 选项可以只显示永久变数， 所要看的对象
-可以是玩家或任何物件。
+命令说明:
+    此命令让你可以观看所指定物件的数据，且将会以 more 的
+方式输出，如果没有指定参数，则自动以使用者为参数。其中的 -t 选
+项可以显示暂存数据, -d 选项可以只显示永久数据， 所要看的对象
+可以是玩家或任何对象。
 LONG;
 // *INDENT-ON*
 }
