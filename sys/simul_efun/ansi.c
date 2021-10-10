@@ -98,6 +98,18 @@ mapping no_color_codes = ([
 ]);
 // *INDENT-ON*
 
+void init_ansi()
+{
+    int i;
+
+    for (i = 0; i < 256; i++) {
+        terminal_codes["256F-" + i] = CSI + "38;5;" + i + "m";
+        terminal_codes["256B-" + i] = CSI + "48;5;" + i + "m";
+        no_color_codes["256F-" + i] = "";
+        no_color_codes["256B-" + i] = "";
+    }
+}
+
 string ansi_filter(string content)
 {
     if (!content) {

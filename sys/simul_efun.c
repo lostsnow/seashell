@@ -13,5 +13,6 @@
 
 void create()
 {
+    init_ansi();
     efun::write("simul_efun: loaded successfully.\n");
 }

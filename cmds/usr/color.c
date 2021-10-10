@@ -4,24 +4,40 @@ inherit IH_CLEAN_UP;
 
 int main(object me, string arg)
 {
+    int i;
+    string colors_256 = "";
+
     tell_object(me, MAG + "#" + HIY + "颜色列表" + NOR + MAG + "#\n" + NOR);
     tell_object(me,
-        "  黑色- BLK" + BLK + "■■■" + NOR + " HIK" + HIK + "■■■" + NOR +
-        "  HBBLK" + HBBLK + "■■■" + NOR + " BBLK" + BBLK + "■■■" + NOR + "\n" +
-        "  红色- RED" + RED + "■■■" + NOR + " HIR" + HIR + "■■■" + NOR +
-        "  HBRED" + HBRED + "■■■" + NOR + " BRED" + BRED + "■■■" + NOR + "\n" +
-        "  绿色- GRN" + GRN + "■■■" + NOR + " HIG" + HIG + "■■■" + NOR +
-        "  HBGRN" + HBGRN + "■■■" + NOR + " BGRN" + BGRN + "■■■" + NOR + "\n" +
-        "  黄色- YEL" + YEL + "■■■" + NOR + " HIY" + HIY + "■■■" + NOR +
-        "  HBYEL" + HBYEL + "■■■" + NOR + " BYEL" + BYEL + "■■■" + NOR + "\n" +
-        "  蓝色- BLU" + BLU + "■■■" + NOR + " HIB" + HIB + "■■■" + NOR +
-        "  HBBLU" + HBBLU + "■■■" + NOR + " BBLU" + BBLU + "■■■" + NOR + "\n" +
-        "  粉色- MAG" + MAG + "■■■" + NOR + " HIM" + HIM + "■■■" + NOR +
-        "  HBMAG" + HBMAG + "■■■" + NOR + " BMAG" + BMAG + "■■■" + NOR + "\n" +
-        "  青色- CYN" + CYN + "■■■" + NOR + " HIC" + HIC + "■■■" + NOR +
-        "  HBCYN" + HBCYN + "■■■" + NOR + " BCYN" + BCYN + "■■■" + NOR + "\n" +
-        "  白色- WHT" + WHT + "■■■" + NOR + " HIW" + HIW + "■■■" + NOR
-        "  HBWHT" + HBWHT + "■■■" + NOR + " BWHT" + BWHT + "■■■" + NOR + "\n");
+        "  BLK " + BLK + "黑色" + NOR + " HIK " + HIK + "黑色" + NOR +
+        "  HBBLK " + HBBLK + "黑色" + NOR + " BBLK " + BBLK + "黑色" + NOR + "\n" +
+        "  RED " + RED + "红色" + NOR + " HIR " + HIR + "红色" + NOR +
+        "  HBRED " + HBRED + "红色" + NOR + " BRED " + BRED + "红色" + NOR + "\n" +
+        "  GRN " + GRN + "绿色" + NOR + " HIG " + HIG + "绿色" + NOR +
+        "  HBGRN " + HBGRN + "绿色" + NOR + " BGRN " + BGRN + "绿色" + NOR + "\n" +
+        "  YEL " + YEL + "黄色" + NOR + " HIY " + HIY + "黄色" + NOR +
+        "  HBYEL " + HBYEL + "黄色" + NOR + " BYEL " + BYEL + "黄色" + NOR + "\n" +
+        "  BLU " + BLU + "蓝色" + NOR + " HIB " + HIB + "蓝色" + NOR +
+        "  HBBLU " + HBBLU + "蓝色" + NOR + " BBLU " + BBLU + "蓝色" + NOR + "\n" +
+        "  MAG " + MAG + "品红" + NOR + " HIM " + HIM + "品红" + NOR +
+        "  HBMAG " + HBMAG + "品红" + NOR + " BMAG " + BMAG + "品红" + NOR + "\n" +
+        "  CYN " + CYN + "青色" + NOR + " HIC " + HIC + "青色" + NOR +
+        "  HBCYN " + HBCYN + "青色" + NOR + " BCYN " + BCYN + "青色" + NOR + "\n" +
+        "  WHT " + WHT + "白色" + NOR + " HIW " + HIW + "白色" + NOR
+        "  HBWHT " + HBWHT + "白色" + NOR + " BWHT " + BWHT + "白色" + NOR + "\n\n");
+
+    for (i = 0; i < 256; i++) {
+        colors_256 += ansi("256B-" + i, sprintf("%|5s", "" + i));
+        if (i == 7 || i == 15) {
+            colors_256 += "\n";
+        }
+
+        if (i > 15 && (i-15) % 12 == 0) {
+            colors_256 += "\n";
+        }
+    }
+
+    tell_object(me, colors_256);
     return 1;
 }
 
