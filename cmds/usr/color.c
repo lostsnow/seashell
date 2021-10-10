@@ -7,7 +7,7 @@ int main(object me, string arg)
     int i;
     string colors_256 = "";
 
-    tell_object(me, MAG + "#" + HIY + "颜色列表" + NOR + MAG + "#\n" + NOR);
+    tell_object(me, ansiln("HBCYN", sprintf("  %-70s", "颜色列表")));
     tell_object(me,
         "  BLK " + BLK + "黑色" + NOR + " HIK " + HIK + "黑色" + NOR +
         "  HBBLK " + HBBLK + "黑色" + NOR + " BBLK " + BBLK + "黑色" + NOR + "\n" +
@@ -26,13 +26,16 @@ int main(object me, string arg)
         "  WHT " + WHT + "白色" + NOR + " HIW " + HIW + "白色" + NOR
         "  HBWHT " + HBWHT + "白色" + NOR + " BWHT " + BWHT + "白色" + NOR + "\n\n");
 
+    tell_object(me, ansiln("256B-126", sprintf("  %-70s", "256 颜色列表")));
+
     for (i = 0; i < 256; i++) {
         colors_256 += ansi("256B-" + i, sprintf("%|5s", "" + i));
+
         if (i == 7 || i == 15) {
             colors_256 += "\n";
         }
 
-        if (i > 15 && (i-15) % 12 == 0) {
+        if (i > 15 && (i - 15) % 12 == 0) {
             colors_256 += "\n";
         }
     }

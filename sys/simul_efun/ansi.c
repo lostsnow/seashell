@@ -136,3 +136,12 @@ string ansi(string color, string content)
 
     return ansi_filter(sprintf("%s%s%s", "%^" + upper_case(color) + "%^", content, "%^NOR%^"));
 }
+
+string ansiln(string color, string content)
+{
+    if (color == "") {
+        return ansi_filter(content);
+    }
+
+    return ansi(color, content) + "\n";
+}
