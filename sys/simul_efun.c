@@ -4,6 +4,7 @@
 
 #include "simul_efun/uid.c"
 #include "simul_efun/ansi.c"
+#include "simul_efun/table.c"
 #include "simul_efun/string.c"
 #include "simul_efun/time.c"
 
